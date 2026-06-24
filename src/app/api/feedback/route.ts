@@ -1,0 +1,40 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { saveFeedback } from '@/lib/supabase/client';
+import { rateLimit, clientKey, sanitiseUserText } from '@/lib/safety/guards';
+
+export const runtime = 'nodejs';
+
+// POST /api/feedback — anonymous, optional email. No account required (FR12).
+export async function POST(req: NextRequest) {
+  const limit = rateLimit(clientKey(req.headers));
+  if (!limit.allowed) {
+    return NextResponse.json({ error: 'Too many requests.' }, { status: 429 });
+  }
+
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 });
+  }
+
+  const email = sanitiseUserText(body.email, 254);
+  // very light email shape check; empty is fine (optional)
+  const emailOk = email === '' || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  if (!emailOk) {
+    return NextResponse.json({ error: 'Please enter a valid email or leave it blank.' }, { status: 400 });
+  }
+
+  const result = await saveFeedback({
+    wasUseful: typeof body.wasUseful === 'boolean' ? body.wasUseful : null,
+    scenarioId: sanitiseUserText(body.scenarioId, 64) || null,
+    unclear: sanitiseUserText(body.unclear, 1000) || null,
+    wishlist: sanitiseUserText(body.wishlist, 1000) || null,
+    email: email || null,
+  });
+
+  if (!result.ok) {
+    return NextResponse.json({ error: 'Could not save feedback.' }, { status: 500 });
+  }
+  return NextResponse.json({ ok: true });
+}

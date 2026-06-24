@@ -1,0 +1,36 @@
+{
+  "name": "medical-aid-navigator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-assisted medical aid benefit navigation MVP for South African members. Educational only — not medical, broker, or claim advice.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@supabase/supabase-js": "^2.45.4",
+    "lucide-react": "^0.451.0",
+    "next": "^15.5.19",
+    "openai": "^4.67.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.11",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.19",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
+  }
+}

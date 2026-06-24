@@ -1,0 +1,63 @@
+/* ============================================================
+   Medical Aid Navigator — Design Tokens
+   Implements docs/STYLING_GUIDE.md. Single source of truth.
+   ============================================================ */
+
+:root {
+  /* ---- Colour (per docs/STYLING_GUIDE.md §2 — colour carries status) ---- */
+  --ink: #13232b;
+  --ink-soft: #4a5d63;
+  --paper: #f7f5f0; /* warm paper, low glare on mobile */
+  --surface: #ffffff;
+  --surface-2: #efeae0; /* warm tinted strip (headers, tracks) */
+  --line: #e2ded5;
+  --line-strong: #c9c2b4;
+
+  --teal: #0e6e66; /* PRIMARY brand / actions */
+  --teal-deep: #0a4f49; /* hover / active */
+  --teal-wash: #e6f0ee; /* tinted panels, selected states */
+
+  --amber: #b5731a; /* "ask / check / confirm" caution */
+  --amber-wash: #fbf1e2;
+
+  --alert: #b3261e; /* EMERGENCY ONLY — never decorative */
+  --alert-wash: #fbeae8;
+
+  /* ---- Typography (loaded via next/font in app/layout.tsx) ---- */
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
+
+  --fs-display: 2rem;
+  --fs-h1: 1.5rem;
+  --fs-h2: 1.2rem;
+  --fs-body: 1rem;
+  --fs-small: 0.85rem;
+  --fs-code: 0.9rem;
+
+  /* ---- Spacing ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ---- Layout ---- */
+  --measure: 64rem;
+  --reading-measure: 40rem; /* readable line length on desktop */
+  --radius: 14px; /* cards — calm, not playful */
+  --radius-sm: 8px; /* inputs, chips */
+  --shadow-card:
+    0 1px 2px rgba(19, 35, 43, 0.04), 0 8px 24px rgba(19, 35, 43, 0.05);
+  --ring: 0 0 0 2px var(--paper), 0 0 0 4px var(--teal);
+}
+
+@media (min-width: 600px) {
+  :root {
+    --fs-display: 2.6rem;
+    --fs-h1: 1.9rem;
+  }
+}

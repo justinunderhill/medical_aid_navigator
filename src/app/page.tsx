@@ -1,0 +1,78 @@
+import Link from 'next/link';
+import { SCENARIOS } from '@/data/scenarios';
+import { ScenarioIcon } from '@/components/ScenarioIcon';
+import { Disclaimer } from '@/components/Disclaimer';
+
+export default function HomePage() {
+  return (
+    <main className="home">
+      <section className="home-hero">
+        <p className="eyebrow">Medical aid navigation</p>
+        <h1 className="h-display">
+          Know what to ask before you use your medical aid.
+        </h1>
+        <p className="lead muted">
+          Pick what&rsquo;s happening and we&rsquo;ll show you what to ask, check,
+          and keep &mdash; the questions, codes, and documents to have ready before
+          you rely on a benefit.
+        </p>
+      </section>
+
+      <div className="callout callout-emergency" role="note">
+        <strong style={{ color: 'var(--alert)' }}>In an emergency, get help first.</strong>{' '}
+        Don&rsquo;t wait to check benefits. Call 10177 (ambulance) or 112 from a
+        mobile, or go to your nearest casualty.
+      </div>
+
+      <section aria-labelledby="pick-situation">
+        <h2 id="pick-situation" className="section-title">What&rsquo;s happening?</h2>
+        <div className="scenario-grid">
+          {SCENARIOS.map((s) => (
+            <Link
+              key={s.id}
+              href={`/scenario/${s.id}`}
+              className={`scenario-card${s.isEmergency ? ' is-emergency' : ''}`}
+            >
+              <span className="scenario-icon">
+                <ScenarioIcon name={s.icon} />
+              </span>
+              <span className="scenario-card-body">
+                <span className="scenario-card-title">{s.title}</span>
+                <span className="scenario-card-blurb">{s.blurb}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="assurance" aria-label="What this tool does and does not do">
+        <div className="assure-card">
+          <h3>What this helps with</h3>
+          <ul className="assure-list do">
+            <li>The right questions to ask your scheme and provider</li>
+            <li>Which codes and documents to request and keep</li>
+            <li>Co-payment, network, and authorisation risks to check</li>
+            <li>Plain-English explainers for the terms that trip people up</li>
+          </ul>
+        </div>
+        <div className="assure-card">
+          <h3>What it won&rsquo;t do</h3>
+          <ul className="assure-list dont">
+            <li>Diagnose you or recommend treatment</li>
+            <li>Guarantee a claim will be paid</li>
+            <li>Tell you to switch schemes or plans</li>
+            <li>Ask for your ID or membership number</li>
+          </ul>
+        </div>
+      </section>
+
+      <p className="small muted home-note">
+        New to the terms? Read the{' '}
+        <Link href="/explainers">plain-English explainers</Link> for PMBs, DSPs,
+        ICD-10 codes, authorisation, and claims disputes.
+      </p>
+
+      <Disclaimer />
+    </main>
+  );
+}
