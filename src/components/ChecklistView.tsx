@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Copy, Check, Download } from 'lucide-react';
+import { buildChecklistPdf } from '@/lib/pdf/checklistPdf';
 
 export interface Checklist {
   scenarioSummary: string;
@@ -78,13 +79,8 @@ export function ChecklistView({ checklist }: { checklist: Checklist }) {
   };
 
   const download = () => {
-    const blob = new Blob([toPlainText(checklist)], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'medical-aid-checklist.txt';
-    a.click();
-    URL.revokeObjectURL(url);
+    const doc = buildChecklistPdf(checklist);
+    doc.save('medical-aid-checklist.pdf');
   };
 
   return (
@@ -125,7 +121,7 @@ export function ChecklistView({ checklist }: { checklist: Checklist }) {
           {copied ? 'Copied' : 'Copy checklist'}
         </button>
         <button className="btn btn-secondary" onClick={download}>
-          <Download size={18} /> Download
+          <Download size={18} /> Download PDF
         </button>
       </div>
 

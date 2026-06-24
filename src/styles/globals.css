@@ -462,6 +462,26 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
 }
 .wordmark-dot::before { content: "MN"; }
 
+.site-footer {
+  max-width: var(--measure);
+  margin: var(--sp-6) auto 0;
+  padding: var(--sp-4);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.site-footer-attribution {
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.site-footer-attribution a {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--teal-deep);
+}
+
 .nav-links { display: flex; gap: var(--sp-4); font-size: var(--fs-small); }
 .nav-links a { color: var(--ink-soft); text-decoration: none; }
 .nav-links a:hover { color: var(--teal-deep); }
