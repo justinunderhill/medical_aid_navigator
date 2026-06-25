@@ -34,6 +34,10 @@ export async function POST(req: NextRequest) {
   });
 
   if (!result.ok) {
+    // Surface the underlying reason in the server logs so a misconfigured
+    // store (missing table, bad key, etc.) is diagnosable — without leaking
+    // it to the client.
+    console.error('[feedback] save failed:', result.error ?? 'unknown error');
     return NextResponse.json({ error: 'Could not save feedback.' }, { status: 500 });
   }
   return NextResponse.json({ ok: true });
