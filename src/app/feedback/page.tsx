@@ -1,17 +1,22 @@
-'use client';
-
-import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { FeedbackForm } from '@/components/FeedbackForm';
 import { Disclaimer } from '@/components/Disclaimer';
 
-function FeedbackPageForm() {
-  const params = useSearchParams();
-  return <FeedbackForm initialScenarioId={params.get('scenario') ?? ''} />;
+type FeedbackPageProps = {
+  searchParams?: Promise<{
+    scenario?: string | string[];
+  }>;
+};
+
+function getScenarioParam(value: string | string[] | undefined) {
+  if (Array.isArray(value)) return value[0] ?? '';
+  return value ?? '';
 }
 
-export default function FeedbackPage() {
+export default async function FeedbackPage({ searchParams }: FeedbackPageProps) {
+  const params = await searchParams;
+  const initialScenarioId = getScenarioParam(params?.scenario);
+
   return (
     <main className="shell">
       <Link href="/" className="link-quiet" style={{ marginBottom: 'var(--sp-4)', display: 'inline-block' }}>
@@ -24,9 +29,7 @@ export default function FeedbackPage() {
       <p className="muted" style={{ marginBottom: 'var(--sp-6)' }}>
         Was this useful? Tell me what confused you about your medical aid, what this tool helped with, or what should be added next.
       </p>
-      <Suspense fallback={<p className="muted">Loading…</p>}>
-        <FeedbackPageForm />
-      </Suspense>
+      <FeedbackForm initialScenarioId={initialScenarioId} />
       <Disclaimer />
     </main>
   );

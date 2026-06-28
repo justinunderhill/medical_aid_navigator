@@ -157,7 +157,7 @@ export const FALLBACK_URGENT_CARE_LEAD =
   'If anyone has severe or worsening symptoms — such as chest pain, trouble ' +
   'breathing, heavy bleeding, confusion, or loss of consciousness — do not ' +
   'wait to check benefits. Get medical care now: call 10177 (ambulance) or ' +
-  '112 from a mobile, or go to your nearest casualty.';
+  '112 from a mobile, or go to the nearest appropriate emergency facility.';
 
 export const EMERGENCY_GUIDANCE = {
   headline: 'If this is a medical emergency, get help now.',

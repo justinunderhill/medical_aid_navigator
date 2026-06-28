@@ -39,7 +39,7 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
       headline: 'Get urgent medical help first',
       body: [
         'If severe symptoms are present, do not use this tool before seeking urgent care.',
-        'Call 10177 for an ambulance, call 112 from a mobile phone, or go to the nearest casualty or emergency unit.',
+        'Call 10177 for an ambulance, call 112 from a mobile phone, or go to the nearest appropriate emergency facility.',
       ],
       afterCare: [
         'Once the person is stable, keep all hospital records, authorisation references, ICD-10 codes, and itemised accounts.',
@@ -128,8 +128,9 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
         <div className="case-header">
           <p className="eyebrow">Case output</p>
           <h1>{scenario.title}</h1>
+          <p className="case-blurb">{scenario.blurb}</p>
           <div className="case-meta">
-            <span className="case-pill">{emergency ? 'urgent guidance' : 'working checklist'}</span>
+            <span className="case-pill">{emergency ? 'urgent guidance' : 'decision brief'}</span>
             <span className="case-pill">confirm with scheme</span>
           </div>
         </div>
@@ -236,6 +237,7 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
       <div className="case-header">
         <p className="eyebrow">Case intake</p>
         <h1>{scenario.title}</h1>
+        <p className="case-blurb">{scenario.blurb}</p>
         <div className="case-meta">
           <span className="case-pill">Question {step + 1} of {questions.length}</span>
           <span className="case-pill">{scenario.isEmergency ? 'urgent path' : 'benefit checklist'}</span>

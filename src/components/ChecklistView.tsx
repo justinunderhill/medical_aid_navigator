@@ -90,7 +90,7 @@ export function ChecklistView({ checklist }: { checklist: Checklist }) {
   return (
     <div className="reveal checklist-document">
       <header className="checklist-header">
-        <p className="eyebrow">Working checklist</p>
+        <p className="eyebrow">Decision brief</p>
         {checklist.scenarioSummary && (
           <p className="muted">
             {checklist.scenarioSummary}

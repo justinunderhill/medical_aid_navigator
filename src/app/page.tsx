@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { SCENARIOS } from '@/data/scenarios';
 import { ScenarioIcon } from '@/components/ScenarioIcon';
 import { Disclaimer } from '@/components/Disclaimer';
@@ -8,24 +9,38 @@ export default function HomePage() {
   return (
     <main className="home">
       <section className="home-hero">
-        <p className="eyebrow">Medical aid navigation</p>
+        <p className="eyebrow">A real-time medical aid navigation MVP</p>
         <h1 className="h-display">
           Know what to ask before you use your medical aid.
         </h1>
-        <p className="lead muted">
-          Pick what&rsquo;s happening and we&rsquo;ll show you what to ask, check,
-          and keep &mdash; the questions, codes, and documents to have ready before
-          you rely on a benefit.
-        </p>
         <p className="home-value-line">
           Before you go, pay, claim, or authorise, know what to ask.
         </p>
+        <p className="lead muted">
+          Medical aid members are often not short of information. They are short
+          of clarity at the moment they need to make a decision. This tool helps
+          you slow the moment down and ask better questions before a benefit
+          becomes a bill.
+        </p>
+        <div className="hero-actions">
+          <a className="btn btn-primary" href="#pick-situation">
+            Start a benefit check <ArrowRight size={17} />
+          </a>
+          <Link className="btn btn-secondary" href="/explainers">
+            View explainers
+          </Link>
+        </div>
+        <div className="trust-row" aria-label="Trust boundaries">
+          <span>No diagnosis</span>
+          <span>No claim guarantees</span>
+          <span>No live scheme connection</span>
+        </div>
       </section>
 
       <div className="callout callout-emergency" role="note">
-        <strong style={{ color: 'var(--alert)' }}>In an emergency, get help first.</strong>{' '}
-        Don&rsquo;t wait to check benefits. Call 10177 (ambulance) or 112 from a
-        mobile, or go to your nearest casualty.
+        <strong>If this may be an emergency, get help first.</strong>{' '}
+        Do not wait to check benefits. Call 10177 (ambulance) or 112 from a
+        mobile, or go to the nearest appropriate emergency facility.
       </div>
 
       <section aria-labelledby="pick-situation">
@@ -43,6 +58,7 @@ export default function HomePage() {
               <span className="scenario-card-body">
                 <span className="scenario-card-title">{s.title}</span>
                 <span className="scenario-card-blurb">{s.blurb}</span>
+                <span className="scenario-card-action">Start</span>
               </span>
             </Link>
           ))}
@@ -56,6 +72,7 @@ export default function HomePage() {
         </div>
         <div className="sample-grid">
           <article className="sample-card">
+            <p className="sample-label">Decision brief preview</p>
             <h3>Going to casualty</h3>
             <ul>
               <li>Get care first if symptoms are severe.</li>
@@ -65,6 +82,7 @@ export default function HomePage() {
             </ul>
           </article>
           <article className="sample-card">
+            <p className="sample-label">Decision brief preview</p>
             <h3>Planned scan/procedure</h3>
             <ul>
               <li>Ask whether pre-authorisation is required before booking.</li>
