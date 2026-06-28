@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Disclaimer } from '@/components/Disclaimer';
 
 const FEEDBACK_PRIVACY_NOTE =
-  'Please do not enter your ID number, medical aid member number, full address, or highly sensitive clinical details. A general description is enough.';
+  'Please DO NOT enter your ID number, medical aid member number, full address, or highly sensitive clinical details. A general description is enough.';
 
 function FeedbackForm() {
   const params = useSearchParams();

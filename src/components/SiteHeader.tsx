@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ShareButton } from '@/components/ShareButton';
 
 export function SiteHeader() {
   return (
@@ -15,6 +16,7 @@ export function SiteHeader() {
         <Link href="/sources">Sources</Link>
         <Link href="/about">About &amp; privacy</Link>
       </nav>
+      <ShareButton />
     </header>
   );
 }
