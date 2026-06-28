@@ -12,6 +12,7 @@ export function SiteHeader() {
       </Link>
       <nav className="nav-links" aria-label="Main">
         <Link href="/explainers">Explainers</Link>
+        <Link href="/sources">Sources</Link>
         <Link href="/about">About &amp; privacy</Link>
       </nav>
     </header>

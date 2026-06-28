@@ -18,6 +18,9 @@ export interface Checklist {
   disclaimer?: string;
 }
 
+const CONFIRMATION_REMINDER =
+  'Confirm benefits, authorisation, network status, costs, and next steps directly with your scheme, provider, or an accredited broker. This checklist does not guarantee any claim outcome.';
+
 function Section({
   title,
   items,
@@ -57,10 +60,11 @@ function toPlainText(c: Checklist): string {
   };
   block('Ask your scheme', c.askYourScheme);
   block('Ask your provider / doctor', c.askYourProvider);
-  block('Documents & codes to request', c.documentsToRequest);
-  block('Possible risk areas', c.riskAreas);
+  block('Codes/documents to request', c.documentsToRequest);
+  block('Cost/co-payment risks to check', c.riskAreas);
   block('What not to do', c.whatNotToDo);
   block('Escalation steps', c.escalationSteps);
+  lines.push('CONFIRMATION REMINDER:', CONFIRMATION_REMINDER, '');
   if (c.disclaimer) lines.push('---', c.disclaimer);
   return lines.join('\n');
 }
@@ -110,10 +114,15 @@ export function ChecklistView({ checklist }: { checklist: Checklist }) {
 
       <Section title="Ask your scheme" items={checklist.askYourScheme} variant="ask" />
       <Section title="Ask your provider or doctor" items={checklist.askYourProvider} variant="ask" />
-      <Section title="Documents and codes to request" items={checklist.documentsToRequest} />
-      <Section title="Possible risk areas" items={checklist.riskAreas} variant="warn" />
+      <Section title="Codes/documents to request" items={checklist.documentsToRequest} />
+      <Section title="Cost/co-payment risks to check" items={checklist.riskAreas} variant="warn" />
       <Section title="What not to do" items={checklist.whatNotToDo} variant="warn" />
       <Section title="If you need to escalate" items={checklist.escalationSteps} />
+
+      <div className="result-section ask">
+        <h3>Confirm directly</h3>
+        <p>{CONFIRMATION_REMINDER}</p>
+      </div>
 
       <div className="checklist-actions">
         <button className="btn btn-primary" onClick={copy}>

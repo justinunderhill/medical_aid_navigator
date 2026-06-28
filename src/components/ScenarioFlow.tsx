@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ShieldAlert } from 'lucide-react';
 import type { Scenario, Question } from '@/data/scenarios';
 import { ChecklistView, type Checklist } from '@/components/ChecklistView';
 import { EmergencyBanner } from '@/components/EmergencyBanner';
 import { Disclaimer } from '@/components/Disclaimer';
 
 type AnswerValue = string | boolean | string[];
+
+const FREE_TEXT_PRIVACY_NOTICE =
+  'Please do not enter your ID number, medical aid member number, full address, or highly sensitive clinical details. A general description is enough.';
 
 interface EmergencyPayload {
   headline: string;
@@ -19,6 +22,7 @@ interface EmergencyPayload {
 export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
   const [step, setStep] = useState(0); // 0..questions.length-1, then result
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
+  const [emergencyGateComplete, setEmergencyGateComplete] = useState(!scenario.isEmergency);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [checklist, setChecklist] = useState<Checklist | null>(null);
@@ -29,6 +33,22 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
 
   const setAnswer = (id: string, value: AnswerValue) =>
     setAnswers((a) => ({ ...a, [id]: value }));
+
+  const showUrgentGuidance = () => {
+    setEmergency({
+      headline: 'Get urgent medical help first',
+      body: [
+        'If severe symptoms are present, do not use this tool before seeking urgent care.',
+        'Call 10177 for an ambulance, call 112 from a mobile phone, or go to the nearest casualty or emergency unit.',
+      ],
+      afterCare: [
+        'Once the person is stable, keep all hospital records, authorisation references, ICD-10 codes, and itemised accounts.',
+        'After care is underway, ask your scheme what emergency notification or authorisation steps are required.',
+      ],
+    });
+    setStep(questions.length);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  };
 
   const submit = async () => {
     setLoading(true);
@@ -130,9 +150,10 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
         {!loading && checklist && (
           <>
             <ChecklistView checklist={checklist} />
-            <p className="small muted" style={{ marginTop: 'var(--sp-6)' }}>
-              Was this useful? <Link href={`/feedback?scenario=${scenario.id}`}>Tell us</Link>.
-            </p>
+            <div className="feedback-cta">
+              <strong>Was this useful? Help improve the MVP.</strong>
+              <Link href={`/feedback?scenario=${scenario.id}`}>Share quick feedback</Link>
+            </div>
           </>
         )}
 
@@ -142,6 +163,53 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
             <p style={{ margin: '4px 0 0' }}>{error}</p>
           </div>
         )}
+      </main>
+    );
+  }
+
+  if (!emergencyGateComplete) {
+    return (
+      <main className="shell">
+        <Link href="/" className="link-quiet" style={{ display: 'inline-flex', gap: 4, marginBottom: 'var(--sp-4)' }}>
+          <ArrowLeft size={16} /> Back to situations
+        </Link>
+
+        <section className="emergency-gate" aria-labelledby="emergency-gate-title">
+          <div className="emergency-gate-icon" aria-hidden>
+            <ShieldAlert size={26} />
+          </div>
+          <p className="eyebrow">Emergency first</p>
+          <h1 id="emergency-gate-title">{scenario.title}</h1>
+          <p>
+            If severe symptoms are present, do not use this tool before seeking urgent care.
+            Get medical help first; benefit questions can wait until care is underway.
+          </p>
+          <div className="emergency-gate-actions">
+            <button className="btn btn-alert" onClick={showUrgentGuidance}>
+              I need urgent help now
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setAnswer('emergencyGate', 'Care is already underway');
+                setEmergencyGateComplete(true);
+              }}
+            >
+              Care is already underway
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => {
+                setAnswer('emergencyGate', 'I need after-care documentation guidance');
+                setEmergencyGateComplete(true);
+              }}
+            >
+              I need after-care documentation guidance
+            </button>
+          </div>
+        </section>
+
+        <Disclaimer />
       </main>
     );
   }
@@ -275,6 +343,7 @@ function QuestionField({
     return (
       <div>
         <label htmlFor={question.id}>{question.label}</label>
+        <p className="field-privacy-note">{FREE_TEXT_PRIVACY_NOTICE}</p>
         <textarea
           id={question.id}
           rows={4}

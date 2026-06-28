@@ -5,13 +5,16 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Disclaimer } from '@/components/Disclaimer';
 
+const FEEDBACK_PRIVACY_NOTE =
+  'Please do not enter your ID number, medical aid member number, full address, or highly sensitive clinical details. A general description is enough.';
+
 function FeedbackForm() {
   const params = useSearchParams();
-  const scenarioId = params.get('scenario') ?? '';
+  const initialScenarioId = params.get('scenario') ?? '';
 
   const [wasUseful, setWasUseful] = useState<boolean | null>(null);
-  const [unclear, setUnclear] = useState('');
-  const [wishlist, setWishlist] = useState('');
+  const [scenarioId, setScenarioId] = useState(initialScenarioId);
+  const [comment, setComment] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
 
@@ -21,7 +24,7 @@ function FeedbackForm() {
       const res = await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wasUseful, scenarioId, unclear, wishlist, email }),
+        body: JSON.stringify({ wasUseful, scenarioId, comment, email }),
       });
       setStatus(res.ok ? 'done' : 'error');
     } catch {
@@ -56,13 +59,27 @@ function FeedbackForm() {
       </div>
 
       <div style={{ marginBottom: 'var(--sp-6)' }}>
-        <label htmlFor="unclear">Was anything unclear?</label>
-        <textarea id="unclear" rows={3} value={unclear} onChange={(e) => setUnclear(e.target.value)} />
+        <label htmlFor="scenario">Scenario</label>
+        <p className="field-privacy-note">{FEEDBACK_PRIVACY_NOTE}</p>
+        <input
+          id="scenario"
+          type="text"
+          value={scenarioId}
+          onChange={(e) => setScenarioId(e.target.value)}
+          placeholder="e.g. casualty, planned-procedure, claim-rejection"
+        />
       </div>
 
       <div style={{ marginBottom: 'var(--sp-6)' }}>
-        <label htmlFor="wishlist">What would you want added?</label>
-        <textarea id="wishlist" rows={3} value={wishlist} onChange={(e) => setWishlist(e.target.value)} />
+        <label htmlFor="comment">Comment</label>
+        <p className="field-privacy-note">{FEEDBACK_PRIVACY_NOTE}</p>
+        <textarea
+          id="comment"
+          rows={4}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="What worked, what was confusing, or what should improve?"
+        />
       </div>
 
       <div style={{ marginBottom: 'var(--sp-6)' }}>
@@ -75,7 +92,7 @@ function FeedbackForm() {
           placeholder="Only if you'd like a reply"
         />
         <p className="small muted" style={{ marginTop: 'var(--sp-2)' }}>
-          We never ask for your ID or membership number. Email is optional and used only to follow up.
+          Email is optional and used only to follow up on your feedback.
         </p>
       </div>
 
@@ -100,8 +117,11 @@ export default function FeedbackPage() {
       </Link>
       <p className="eyebrow">Feedback</p>
       <h1 className="h-display" style={{ marginTop: 'var(--sp-2)', marginBottom: 'var(--sp-4)' }}>
-        Help us make this more useful.
+        Was this useful? Help improve the MVP.
       </h1>
+      <p className="muted" style={{ marginBottom: 'var(--sp-6)' }}>
+        No login required. Feedback is optional and anonymous unless you choose to provide an email.
+      </p>
       <Suspense fallback={<p className="muted">Loading…</p>}>
         <FeedbackForm />
       </Suspense>

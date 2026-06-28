@@ -13,6 +13,8 @@ const INK_SOFT: [number, number, number] = [0x4a, 0x5d, 0x63];
 const TEAL: [number, number, number] = [0x0e, 0x6e, 0x66];
 const AMBER: [number, number, number] = [0xb5, 0x73, 0x1a];
 const ALERT: [number, number, number] = [0xb3, 0x26, 0x1e];
+const CONFIRMATION_REMINDER =
+  'Confirm benefits, authorisation, network status, costs, and next steps directly with your scheme, provider, or an accredited broker. This checklist does not guarantee any claim outcome.';
 
 type Variant = 'do' | 'ask' | 'warn';
 
@@ -107,10 +109,11 @@ export function buildChecklistPdf(c: Checklist, appName = 'Medical Aid Navigator
   paragraph('Possible benefit category', c.possibleBenefitCategory, 'ask');
   list('Ask your scheme', c.askYourScheme, 'ask');
   list('Ask your provider or doctor', c.askYourProvider, 'ask');
-  list('Documents and codes to request', c.documentsToRequest, 'do');
-  list('Possible risk areas', c.riskAreas, 'warn');
+  list('Codes/documents to request', c.documentsToRequest, 'do');
+  list('Cost/co-payment risks to check', c.riskAreas, 'warn');
   list('What not to do', c.whatNotToDo, 'warn');
   list('If you need to escalate', c.escalationSteps, 'do');
+  paragraph('Confirm directly', CONFIRMATION_REMINDER, 'ask');
 
   // ---- Disclaimer footer ----
   if (c.disclaimer) {

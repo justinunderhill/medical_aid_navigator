@@ -45,6 +45,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="sample-checklists" aria-labelledby="sample-checklists-title">
+        <div className="sample-heading">
+          <p className="eyebrow">Example outputs</p>
+          <h2 id="sample-checklists-title">The kind of checklist you can expect</h2>
+        </div>
+        <div className="sample-grid">
+          <article className="sample-card">
+            <h3>Going to casualty</h3>
+            <ul>
+              <li>Get care first if symptoms are severe.</li>
+              <li>Ask if the facility is in-network for your plan.</li>
+              <li>Keep ICD-10 codes, triage notes, and itemised accounts.</li>
+              <li>Check emergency notification and co-payment rules afterwards.</li>
+            </ul>
+          </article>
+          <article className="sample-card">
+            <h3>Planned scan/procedure</h3>
+            <ul>
+              <li>Ask whether pre-authorisation is required before booking.</li>
+              <li>Request ICD-10 and procedure/tariff codes from the provider.</li>
+              <li>Confirm network, DSP, and co-payment risks in writing.</li>
+              <li>Keep the quote, referral, and authorisation reference.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
       <section className="assurance" aria-label="What this tool does and does not do">
         <div className="assure-card">
           <h3>What this helps with</h3>
@@ -69,7 +96,8 @@ export default function HomePage() {
       <p className="small muted home-note">
         New to the terms? Read the{' '}
         <Link href="/explainers">plain-English explainers</Link> for PMBs, DSPs,
-        ICD-10 codes, authorisation, and claims disputes.
+        ICD-10 codes, authorisation, and claims disputes. You can also review the{' '}
+        <Link href="/sources">sources and limitations</Link>.
       </p>
 
       <Disclaimer />

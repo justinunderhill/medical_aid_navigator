@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   const result = await saveFeedback({
     wasUseful: typeof body.wasUseful === 'boolean' ? body.wasUseful : null,
     scenarioId: sanitiseUserText(body.scenarioId, 64) || null,
-    unclear: sanitiseUserText(body.unclear, 1000) || null,
+    unclear: sanitiseUserText(body.comment ?? body.unclear, 1000) || null,
     wishlist: sanitiseUserText(body.wishlist, 1000) || null,
     email: email || null,
   });

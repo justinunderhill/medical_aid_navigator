@@ -40,7 +40,7 @@ function emergencyChecklist(summary: string): NavigationChecklist {
     isEmergency: true,
     immediateNextStep: EMERGENCY_GUIDANCE.body.join(' '),
     possibleBenefitCategory:
-      'Emergency stabilisation cannot be refused by your scheme. Confirm benefit details with your scheme after the person is stable.',
+      'This may relate to emergency care benefits or a PMB emergency — confirm benefit details with your doctor and scheme after the person is stable.',
     askYourScheme: [...EMERGENCY_GUIDANCE.afterCare],
     askYourProvider: [
       'Ask for the ICD-10 code and clinical notes for the emergency visit.',
@@ -201,18 +201,53 @@ function validateChecklistFields(c: NavigationChecklist): NavigationChecklist {
     return r.text;
   };
   const scrubArr = (arr: string[] = []): string[] => arr.map(scrub);
+  const withDefault = (value: string, fallback: string): string => {
+    const cleaned = scrub(value ?? '');
+    return cleaned || fallback;
+  };
+  const arrWithDefault = (arr: string[] = [], fallback: string): string[] => {
+    const cleaned = scrubArr(arr).filter(Boolean);
+    return cleaned.length ? cleaned : [fallback];
+  };
 
   const out: NavigationChecklist = {
-    scenarioSummary: scrub(c.scenarioSummary ?? ''),
+    scenarioSummary: withDefault(
+      c.scenarioSummary,
+      'A medical aid navigation checklist based on the information provided.'
+    ),
     isEmergency: Boolean(c.isEmergency),
-    immediateNextStep: scrub(c.immediateNextStep ?? ''),
-    possibleBenefitCategory: scrub(c.possibleBenefitCategory ?? ''),
-    askYourScheme: scrubArr(c.askYourScheme),
-    askYourProvider: scrubArr(c.askYourProvider),
-    documentsToRequest: scrubArr(c.documentsToRequest),
-    riskAreas: scrubArr(c.riskAreas),
-    whatNotToDo: scrubArr(c.whatNotToDo),
-    escalationSteps: scrubArr(c.escalationSteps),
+    immediateNextStep: withDefault(
+      c.immediateNextStep,
+      'Confirm the next step directly with your scheme or provider before proceeding, unless this is urgent.'
+    ),
+    possibleBenefitCategory: withDefault(
+      c.possibleBenefitCategory,
+      'This may fall under one or more benefit categories — confirm with your scheme.'
+    ),
+    askYourScheme: arrWithDefault(
+      c.askYourScheme,
+      'Which benefit would this be paid from, and what must I confirm before proceeding?'
+    ),
+    askYourProvider: arrWithDefault(
+      c.askYourProvider,
+      'Which ICD-10, tariff, or procedure codes will appear on the account or quote?'
+    ),
+    documentsToRequest: arrWithDefault(
+      c.documentsToRequest,
+      'Request the ICD-10 code, relevant procedure/tariff codes, written quote, and any authorisation reference.'
+    ),
+    riskAreas: arrWithDefault(
+      c.riskAreas,
+      'Ask whether co-payments, network/DSP rules, scheme rates, benefit limits, or authorisation gaps may affect what you pay.'
+    ),
+    whatNotToDo: arrWithDefault(
+      c.whatNotToDo,
+      'Do not assume cover or delay urgent care based on this checklist.'
+    ),
+    escalationSteps: arrWithDefault(
+      c.escalationSteps,
+      'If the answer is unclear, ask the scheme for written reasons or the next documented process step.'
+    ),
     _validationFlags: flags,
   };
   return out;

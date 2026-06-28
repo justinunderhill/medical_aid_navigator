@@ -81,9 +81,10 @@ these sections (omit any that don't apply):
 - **Possible benefit category** (with "confirm with your scheme")
 - **What to ask your scheme**
 - **What to ask your provider / doctor / hospital**
-- **Documents or codes to request** (e.g. ICD-10 code, tariff codes, quote,
+- **Codes/documents to request** (e.g. ICD-10 code, tariff codes, quote,
   authorisation number, referral letter, written reasons)
-- **Possible risk areas** (e.g. co-payments, non-network providers)
+- **Cost/co-payment risks to check** (e.g. co-payments, non-network providers,
+  DSP/network rules, scheme rates, benefit limits, authorisation gaps)
 - **What not to do**
 - **Escalation steps if needed**
 
