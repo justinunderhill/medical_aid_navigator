@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import type { Scenario, Question } from '@/data/scenarios';
@@ -33,6 +33,10 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
   const submit = async () => {
     setLoading(true);
     setError(null);
+    // Switch to the result view immediately so the user sees the
+    // "generating" indicator during the wait, not a frozen question.
+    setStep(questions.length);
+    window.scrollTo({ top: 0, behavior: 'auto' });
     try {
       const freeText =
         typeof answers.whatHappened === 'string'
@@ -57,7 +61,6 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
           const classified = await classifyRes.json();
           if (classified.isEmergency) {
             setEmergency(classified.emergency);
-            setStep(questions.length);
             return;
           }
           if (classifyRes.ok && typeof classified.scenarioId === 'string') {
@@ -88,10 +91,8 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
             'We could not generate guidance right now. Please contact your scheme directly.'
         );
       }
-      setStep(questions.length);
     } catch {
       setError('Something went wrong. Please check your connection and try again.');
-      setStep(questions.length);
     } finally {
       setLoading(false);
     }
@@ -113,11 +114,7 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
           </div>
         </div>
 
-        {loading && (
-          <div style={{ display: 'flex', gap: 'var(--sp-3)', alignItems: 'center' }}>
-            <span className="spinner" /> <span className="muted">Preparing your checklist...</span>
-          </div>
-        )}
+        {loading && <GeneratingChecklist />}
 
         {!loading && emergency && (
           <>
@@ -206,6 +203,62 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
 
       <Disclaimer />
     </main>
+  );
+}
+
+const GENERATING_STEPS = [
+  'Reviewing your answers',
+  'Checking the relevant scheme rules',
+  'Working out what to confirm next',
+  'Putting your checklist together',
+];
+
+function GeneratingChecklist() {
+  const [seconds, setSeconds] = useState(0);
+  const [stepIndex, setStepIndex] = useState(0);
+
+  useEffect(() => {
+    const tick = setInterval(() => setSeconds((s) => s + 1), 1000);
+    // Advance the status message, holding on the last one until done.
+    const advance = setInterval(
+      () => setStepIndex((i) => Math.min(i + 1, GENERATING_STEPS.length - 1)),
+      2200
+    );
+    return () => {
+      clearInterval(tick);
+      clearInterval(advance);
+    };
+  }, []);
+
+  return (
+    <div className="generating" role="status" aria-live="polite">
+      <div className="generating-head">
+        <span className="spinner" />
+        <div>
+          <strong>Building your checklist…</strong>
+          <p className="small muted" style={{ margin: '2px 0 0' }}>
+            This usually takes a few seconds. Please don’t close this page.
+          </p>
+        </div>
+        <span className="generating-timer" aria-hidden>
+          {seconds}s
+        </span>
+      </div>
+
+      <ul className="generating-steps" aria-hidden>
+        {GENERATING_STEPS.map((label, i) => (
+          <li
+            key={label}
+            className={
+              i < stepIndex ? 'is-done' : i === stepIndex ? 'is-active' : 'is-pending'
+            }
+          >
+            <span className="generating-dot" />
+            {label}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
