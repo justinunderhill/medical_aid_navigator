@@ -25,9 +25,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Please enter a valid email or leave it blank.' }, { status: 400 });
   }
 
+  const useful = sanitiseUserText(body.useful, 16).toLowerCase();
+  const wasUseful =
+    useful === 'yes'
+      ? true
+      : useful === 'no'
+        ? false
+        : typeof body.wasUseful === 'boolean'
+          ? body.wasUseful
+          : null;
+  const situation = sanitiseUserText(body.situation ?? body.scenarioId, 64) || null;
+
   const result = await saveFeedback({
-    wasUseful: typeof body.wasUseful === 'boolean' ? body.wasUseful : null,
-    scenarioId: sanitiseUserText(body.scenarioId, 64) || null,
+    wasUseful,
+    scenarioId: situation,
     unclear: sanitiseUserText(body.comment ?? body.unclear, 1000) || null,
     wishlist: sanitiseUserText(body.wishlist, 1000) || null,
     email: email || null,

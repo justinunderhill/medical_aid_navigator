@@ -12,9 +12,9 @@ describe('validateOutput', () => {
   });
 
   it('softens a claim-payment guarantee', () => {
-    const r = validateOutput('This procedure will be covered by your scheme.');
+    const r = validateOutput('This procedure is covered by your scheme.');
     expect(r.safe).toBe(false);
-    expect(r.text).not.toMatch(/will be covered/i);
+    expect(r.text).not.toMatch(/is covered/i);
     expect(r.text.toLowerCase()).toContain('confirm');
   });
 

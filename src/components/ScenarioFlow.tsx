@@ -11,7 +11,7 @@ import { Disclaimer } from '@/components/Disclaimer';
 type AnswerValue = string | boolean | string[];
 
 const FREE_TEXT_PRIVACY_NOTICE =
-  'Please DO NOT enter your ID number, medical aid member number, full address, or highly sensitive clinical details. A general description is enough.';
+  'Please do not enter your ID number, medical aid member number, full address, or highly sensitive clinical details. A general description is enough.';
 
 interface EmergencyPayload {
   headline: string;
@@ -152,10 +152,10 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
             <ChecklistView checklist={checklist} />
             <div className="feedback-cta">
               <div>
-                <p className="eyebrow">MVP feedback</p>
-                <strong>Was this useful? Help improve the MVP.</strong>
+                <p className="eyebrow">Feedback</p>
+                <strong>Help improve this MVP</strong>
                 <p className="small muted">
-                  A quick note helps us improve the scenarios, wording, and checklists.
+                  Was this useful? Tell me what confused you, what helped, or what should be added next.
                 </p>
               </div>
               <Link className="btn btn-primary" href={`/feedback?scenario=${scenario.id}`}>
@@ -250,6 +250,7 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
           <p className="small muted" style={{ marginBottom: 0 }}>
             Answer only what you know. The checklist will focus on what to confirm next.
           </p>
+          <p className="field-privacy-note">{FREE_TEXT_PRIVACY_NOTICE}</p>
         </div>
 
         <QuestionField question={q} value={answers[q.id]} onChange={(v) => setAnswer(q.id, v)} />

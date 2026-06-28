@@ -66,9 +66,9 @@ lead with "if symptoms are severe, seek care immediately" before anything else.
 "Confirm before proceeding unless this is an emergency…", "Request the
 ICD-10 code…", "Keep written proof…".
 
-**Forbidden phrasing:** "Your scheme must pay.", "This is definitely
-covered.", "You do not need to go to hospital.", "This is a PMB.",
-"Discovery is wrong.", "This doctor is overcharging."
+**Forbidden phrasing:** absolute payment promises, definitive coverage
+statements, advice against seeking care, PMB declarations, scheme-blaming,
+and provider-blaming.
 
 ---
 
@@ -81,9 +81,9 @@ these sections (omit any that don't apply):
 - **Possible benefit category** (with "confirm with your scheme")
 - **What to ask your scheme**
 - **What to ask your provider / doctor / hospital**
-- **Codes/documents to request** (e.g. ICD-10 code, tariff codes, quote,
+- **Codes and documents to request** (e.g. ICD-10 code, tariff codes, quote,
   authorisation number, referral letter, written reasons)
-- **Cost/co-payment risks to check** (e.g. co-payments, non-network providers,
+- **Cost or co-payment risks to check** (e.g. co-payments, non-network providers,
   DSP/network rules, scheme rates, benefit limits, authorisation gaps)
 - **What not to do**
 - **Escalation steps if needed**

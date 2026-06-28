@@ -60,7 +60,7 @@ function emergencyChecklist(summary: string): NavigationChecklist {
       'Do not assume the visit is or is not covered — confirm afterwards.',
     ],
     escalationSteps: [
-      'After stabilisation, report to your scheme and ask whether this qualifies as a PMB emergency.',
+      'After stabilisation, report to your scheme and ask whether this may fall into a PMB emergency pathway.',
     ],
     disclaimer: STANDARD_DISCLAIMER,
   };

@@ -109,11 +109,11 @@ export function buildChecklistPdf(c: Checklist, appName = 'Medical Aid Navigator
   paragraph('Possible benefit category', c.possibleBenefitCategory, 'ask');
   list('Ask your scheme', c.askYourScheme, 'ask');
   list('Ask your provider or doctor', c.askYourProvider, 'ask');
-  list('Codes/documents to request', c.documentsToRequest, 'do');
-  list('Cost/co-payment risks to check', c.riskAreas, 'warn');
+  list('Codes and documents to request', c.documentsToRequest, 'do');
+  list('Cost or co-payment risks to check', c.riskAreas, 'warn');
   list('What not to do', c.whatNotToDo, 'warn');
   list('If you need to escalate', c.escalationSteps, 'do');
-  paragraph('Confirm directly', CONFIRMATION_REMINDER, 'ask');
+  paragraph('Confirm before proceeding', CONFIRMATION_REMINDER, 'ask');
 
   // ---- Disclaimer footer ----
   if (c.disclaimer) {

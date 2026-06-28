@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { SCENARIOS } from '@/data/scenarios';
 import { ScenarioIcon } from '@/components/ScenarioIcon';
 import { Disclaimer } from '@/components/Disclaimer';
+import { FeedbackForm } from '@/components/FeedbackForm';
 
 export default function HomePage() {
   return (
@@ -15,6 +16,9 @@ export default function HomePage() {
           Pick what&rsquo;s happening and we&rsquo;ll show you what to ask, check,
           and keep &mdash; the questions, codes, and documents to have ready before
           you rely on a benefit.
+        </p>
+        <p className="home-value-line">
+          Before you go, pay, claim, or authorise, know what to ask.
         </p>
       </section>
 
@@ -86,11 +90,34 @@ export default function HomePage() {
           <h3>What it won&rsquo;t do</h3>
           <ul className="assure-list dont">
             <li>Diagnose you or recommend treatment</li>
-            <li>Guarantee a claim will be paid</li>
+            <li>Guarantee a claim outcome</li>
             <li>Tell you to switch schemes or plans</li>
             <li>Ask for your ID or membership number</li>
           </ul>
         </div>
+      </section>
+
+      <section className="mvp-limits" aria-labelledby="mvp-limits-title">
+        <p className="eyebrow">What this MVP cannot do</p>
+        <h2 id="mvp-limits-title">Always confirm directly</h2>
+        <p>
+          This MVP cannot confirm your personal benefits, balances, authorisation status,
+          provider network status, PMB status, or claim outcome. It does not connect to
+          live scheme systems. Always confirm directly with your medical scheme,
+          healthcare provider, or accredited broker.
+        </p>
+      </section>
+
+      <section className="home-feedback" aria-labelledby="home-feedback-title">
+        <div className="home-feedback-head">
+          <p className="eyebrow">Feedback</p>
+          <h2 id="home-feedback-title">Help improve this MVP</h2>
+          <p>
+            Was this useful? Tell me what confused you about your medical aid,
+            what this tool helped with, or what should be added next.
+          </p>
+        </div>
+        <FeedbackForm />
       </section>
 
       <p className="small muted home-note">

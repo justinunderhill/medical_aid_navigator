@@ -60,11 +60,11 @@ function toPlainText(c: Checklist): string {
   };
   block('Ask your scheme', c.askYourScheme);
   block('Ask your provider / doctor', c.askYourProvider);
-  block('Codes/documents to request', c.documentsToRequest);
-  block('Cost/co-payment risks to check', c.riskAreas);
+  block('Codes and documents to request', c.documentsToRequest);
+  block('Cost or co-payment risks to check', c.riskAreas);
   block('What not to do', c.whatNotToDo);
   block('Escalation steps', c.escalationSteps);
-  lines.push('CONFIRMATION REMINDER:', CONFIRMATION_REMINDER, '');
+  lines.push('CONFIRM BEFORE PROCEEDING:', CONFIRMATION_REMINDER, '');
   if (c.disclaimer) lines.push('---', c.disclaimer);
   return lines.join('\n');
 }
@@ -114,13 +114,13 @@ export function ChecklistView({ checklist }: { checklist: Checklist }) {
 
       <Section title="Ask your scheme" items={checklist.askYourScheme} variant="ask" />
       <Section title="Ask your provider or doctor" items={checklist.askYourProvider} variant="ask" />
-      <Section title="Codes/documents to request" items={checklist.documentsToRequest} />
-      <Section title="Cost/co-payment risks to check" items={checklist.riskAreas} variant="warn" />
+      <Section title="Codes and documents to request" items={checklist.documentsToRequest} />
+      <Section title="Cost or co-payment risks to check" items={checklist.riskAreas} variant="warn" />
       <Section title="What not to do" items={checklist.whatNotToDo} variant="warn" />
       <Section title="If you need to escalate" items={checklist.escalationSteps} />
 
       <div className="result-section ask">
-        <h3>Confirm directly</h3>
+        <h3>Confirm before proceeding</h3>
         <p>{CONFIRMATION_REMINDER}</p>
       </div>
 

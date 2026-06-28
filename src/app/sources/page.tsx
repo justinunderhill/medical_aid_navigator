@@ -56,6 +56,12 @@ export default function SourcesPage() {
       <section className="sources-panel" aria-labelledby="limits-title">
         <p className="eyebrow">Important limits</p>
         <h2 id="limits-title">Always confirm your own position</h2>
+        <p className="sources-limit-copy">
+          This MVP cannot confirm your personal benefits, balances, authorisation status,
+          provider network status, PMB status, or claim outcome. It does not connect to
+          live scheme systems. Always confirm directly with your medical scheme,
+          healthcare provider, or accredited broker.
+        </p>
         <ul className="sources-list">
           <li>No diagnosis or treatment advice.</li>
           <li>No claim guarantee or prediction.</li>

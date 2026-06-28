@@ -127,6 +127,15 @@ a { color: var(--teal-deep); }
 .home-hero { margin-bottom: var(--sp-6); }
 .home-hero .h-display { margin: var(--sp-3) 0; max-width: 18ch; }
 .home-hero .lead { font-size: 1.1rem; max-width: 52ch; }
+.home-value-line {
+  display: inline-block;
+  margin: var(--sp-1) 0 0;
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 3px solid var(--teal);
+  background: var(--teal-wash);
+  color: var(--teal-deep);
+  font-weight: 700;
+}
 
 .section-title { margin: var(--sp-8) 0 var(--sp-4); }
 
@@ -173,6 +182,47 @@ a { color: var(--teal-deep); }
 }
 
 .home-note { margin-top: var(--sp-8); }
+
+.mvp-limits,
+.home-feedback {
+  margin-top: var(--sp-8);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  padding: var(--sp-5, 20px);
+}
+
+.mvp-limits {
+  border-color: color-mix(in srgb, var(--amber) 25%, var(--line));
+  background: var(--amber-wash);
+}
+
+.mvp-limits h2,
+.home-feedback h2 {
+  margin: var(--sp-1) 0 var(--sp-2);
+}
+
+.mvp-limits p:last-child,
+.home-feedback-head p {
+  margin-bottom: 0;
+  color: var(--ink-soft);
+}
+
+.home-feedback-head {
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.feedback-form {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.feedback-field {
+  display: grid;
+}
 
 /* ---- Homepage sample checklists ---- */
 .sample-checklists {
@@ -328,6 +378,11 @@ a { color: var(--teal-deep); }
 
 .sources-panel h2 {
   margin: var(--sp-1) 0 var(--sp-3);
+}
+
+.sources-limit-copy {
+  max-width: 62rem;
+  color: var(--ink-soft);
 }
 
 .sources-list {

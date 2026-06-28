@@ -48,7 +48,7 @@ const RULES: Rule[] = [
     test: /\byour\s+scheme\s+must\s+pay\b/gi,
     severity: 'hard',
     replacement: () => 'ask your scheme whether this is payable',
-    note: 'Absolute "scheme must pay" replaced with a question to ask.',
+    note: 'Absolute scheme-payment language replaced with a question to ask.',
   },
   {
     test: /\bthis\s+is\s+(definitely\s+)?(a\s+)?pmb\b/gi,

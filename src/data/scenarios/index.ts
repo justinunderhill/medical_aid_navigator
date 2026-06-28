@@ -85,6 +85,12 @@ export const SCENARIOS: Scenario[] = [
         type: 'boolean',
         optional: true,
       },
+      {
+        id: 'context',
+        label: 'Anything else you want the checklist to consider? (optional)',
+        type: 'text',
+        optional: true,
+      },
     ],
   },
   {
@@ -115,6 +121,12 @@ export const SCENARIOS: Scenario[] = [
         options: ['Before the visit', 'After the visit', 'Not sure'],
         optional: true,
       },
+      {
+        id: 'context',
+        label: 'Anything else you want the checklist to consider? (optional)',
+        type: 'text',
+        optional: true,
+      },
     ],
   },
   {
@@ -141,6 +153,12 @@ export const SCENARIOS: Scenario[] = [
         options: ['Yes', 'No', 'Not sure'],
         optional: true,
       },
+      {
+        id: 'context',
+        label: 'Anything else you want the checklist to consider? (optional)',
+        type: 'text',
+        optional: true,
+      },
     ],
   },
   {
@@ -161,6 +179,12 @@ export const SCENARIOS: Scenario[] = [
         options: ['Yes', 'No', 'Not sure'],
         optional: true,
       },
+      {
+        id: 'context',
+        label: 'Anything else you want the checklist to consider? (optional)',
+        type: 'text',
+        optional: true,
+      },
     ],
   },
   {
@@ -179,6 +203,12 @@ export const SCENARIOS: Scenario[] = [
       },
       { id: 'hasAuth', label: 'Has authorisation been obtained?', type: 'boolean', optional: true },
       { id: 'hasQuote', label: 'Do you have a quote and the procedure codes?', type: 'boolean', optional: true },
+      {
+        id: 'context',
+        label: 'Anything else you want the checklist to consider? (optional)',
+        type: 'text',
+        optional: true,
+      },
     ],
   },
   {
@@ -224,6 +254,12 @@ export const SCENARIOS: Scenario[] = [
         options: ['Yes', 'No', 'Not sure'],
         optional: true,
       },
+      {
+        id: 'context',
+        label: 'Anything else you want the checklist to consider? (optional)',
+        type: 'text',
+        optional: true,
+      },
     ],
   },
   {
@@ -259,6 +295,12 @@ export const SCENARIOS: Scenario[] = [
         label: "Do you have the provider's billing codes?",
         type: 'single',
         options: ['Yes', 'No', 'Not sure'],
+        optional: true,
+      },
+      {
+        id: 'context',
+        label: 'Anything else you want the checklist to consider? (optional)',
+        type: 'text',
         optional: true,
       },
     ],
