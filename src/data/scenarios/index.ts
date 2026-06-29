@@ -8,6 +8,7 @@
  */
 
 export type QuestionType = 'single' | 'multi' | 'text' | 'boolean';
+export type ScenarioCategory = 'urgent' | 'care' | 'claims';
 
 export interface Question {
   id: string;
@@ -24,6 +25,7 @@ export interface Scenario {
   title: string; // user-facing card title
   blurb: string; // one-line description
   icon: string; // lucide icon name (used by UI)
+  category: ScenarioCategory;
   isEmergency: boolean;
   /** routes "I'm not sure" style entry */
   isTriage?: boolean;
@@ -36,6 +38,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'I need emergency care',
     blurb: 'Someone is seriously unwell or injured right now.',
     icon: 'siren',
+    category: 'urgent',
     isEmergency: true,
     questions: [
       {
@@ -64,6 +67,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'Going to casualty / after-hours',
     blurb: 'You are heading to casualty or an after-hours clinic.',
     icon: 'clock',
+    category: 'urgent',
     isEmergency: false,
     questions: [
       {
@@ -98,6 +102,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'See a GP or pharmacy clinic',
     blurb: 'A routine, non-urgent visit to a GP or clinic.',
     icon: 'stethoscope',
+    category: 'care',
     isEmergency: false,
     questions: [
       {
@@ -134,6 +139,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'I was referred to a specialist',
     blurb: 'A GP or doctor referred you to a specialist.',
     icon: 'user-round-search',
+    category: 'care',
     isEmergency: false,
     questions: [
       { id: 'hasReferral', label: 'Do you have a GP referral letter?', type: 'boolean', optional: true },
@@ -166,6 +172,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'I was diagnosed with a chronic condition',
     blurb: 'Registering for chronic medicine benefits.',
     icon: 'pill',
+    category: 'care',
     isEmergency: false,
     questions: [
       { id: 'hasDiagnosis', label: 'Has a doctor made the diagnosis?', type: 'boolean', optional: true },
@@ -192,6 +199,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'A scan, procedure, or hospital admission',
     blurb: 'Planned care that may need authorisation.',
     icon: 'clipboard-list',
+    category: 'care',
     isEmergency: false,
     questions: [
       {
@@ -216,6 +224,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'I need to understand PMBs',
     blurb: 'What Prescribed Minimum Benefits mean for you.',
     icon: 'book-open',
+    category: 'claims',
     isEmergency: false,
     questions: [
       {
@@ -231,6 +240,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'Check network or DSP rules',
     blurb: 'Designated Service Providers and co-payments.',
     icon: 'map-pin',
+    category: 'claims',
     isEmergency: false,
     questions: [
       {
@@ -267,6 +277,7 @@ export const SCENARIOS: Scenario[] = [
     title: 'My claim was rejected',
     blurb: 'Understand why and what to do next.',
     icon: 'file-x',
+    category: 'claims',
     isEmergency: false,
     questions: [
       {
@@ -310,6 +321,7 @@ export const SCENARIOS: Scenario[] = [
     title: "I'm not sure what to do",
     blurb: 'Answer a couple of questions and we will point you the right way.',
     icon: 'help-circle',
+    category: 'care',
     isEmergency: false,
     isTriage: true,
     questions: [

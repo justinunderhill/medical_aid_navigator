@@ -1,38 +1,44 @@
 /* ============================================================
-   Medical Aid Navigator — Design Tokens
-   Implements docs/STYLING_GUIDE.md. Single source of truth.
+   Medical Aid Navigator — Design Tokens v2
+   One signal vocabulary:
+   coral = urgent / emergency, pine = care & planning, violet = cover & claims.
    ============================================================ */
 
 :root {
-  /* ---- Colour (per docs/STYLING_GUIDE.md §2 — colour carries status) ---- */
-  --ink: #172126;
-  --ink-soft: #526167;
-  --paper: #f5f3ee; /* warm stone, low glare on mobile */
+  /* ---- Brand / category colours ---- */
+  --pine: #123a36;
+  --pine-deep: #0c2a27;
+  --pine-tint: #e5efec;
+
+  --coral: #c2410c;
+  --coral-deep: #9a330a;
+  --coral-tint: #fbeee7;
+
+  --violet: #6b5ba8;
+  --violet-deep: #564792;
+  --violet-tint: #e9e5f5;
+
+  --gold: #b5731a;
+  --gold-tint: #f8efdd;
+
+  /* ---- Neutrals ---- */
+  --bone: #f1eee6;
   --surface: #ffffff;
-  --surface-2: #eeebe4; /* quiet neutral tint (headers, tracks) */
-  --line: #ded9cf;
-  --line-strong: #bdb5a8;
-
-  --teal: #174f55; /* PRIMARY brand / actions */
-  --teal-deep: #103a40; /* hover / active */
-  --teal-wash: #e8f0ef; /* tinted panels, selected states */
-
-  --amber: #9a6a24; /* "ask / check / confirm" caution */
-  --amber-wash: #f5efe3;
-
-  --alert: #9f2d26; /* EMERGENCY ONLY — never decorative */
-  --alert-wash: #f7ecea;
+  --ink: #16231f;
+  --ink-soft: #5c6b65;
+  --line: #e2ddd0;
 
   /* ---- Typography (loaded via next/font in app/layout.tsx) ---- */
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
   --font-body: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
 
-  --fs-display: 2.25rem;
-  --fs-h1: 1.65rem;
-  --fs-h2: 1.25rem;
-  --fs-body: 1.02rem;
-  --fs-small: 0.88rem;
+  --fs-display: 2.1rem;
+  --fs-h1: 1.5rem;
+  --fs-h2: 1.2rem;
+  --fs-lead: 1.5rem;
+  --fs-body: 1rem;
+  --fs-small: 0.85rem;
   --fs-code: 0.9rem;
 
   /* ---- Spacing ---- */
@@ -46,18 +52,31 @@
   --sp-16: 64px;
 
   /* ---- Layout ---- */
-  --measure: 68rem;
-  --reading-measure: 42rem; /* readable line length on desktop */
-  --radius: 10px; /* restrained, premium */
-  --radius-sm: 8px; /* inputs, chips */
+  --measure: 44rem;
+  --radius: 12px;
+  --radius-sm: 8px;
   --shadow-card:
-    0 1px 2px rgba(19, 35, 43, 0.035), 0 10px 24px rgba(19, 35, 43, 0.035);
-  --ring: 0 0 0 2px var(--paper), 0 0 0 4px var(--teal);
+    0 1px 2px rgba(18, 58, 54, 0.04), 0 8px 24px rgba(18, 58, 54, 0.06);
+  --shadow-hover: 0 6px 22px rgba(18, 58, 54, 0.10);
+  --ring: 0 0 0 2px var(--bone), 0 0 0 4px var(--pine);
+
+  /* ---- Compatibility aliases for existing app sections not replaced by v2 ---- */
+  --paper: var(--bone);
+  --surface-2: #eeebe4;
+  --line-strong: #bdb5a8;
+  --teal: var(--pine);
+  --teal-deep: var(--pine-deep);
+  --teal-wash: var(--pine-tint);
+  --amber: var(--gold);
+  --amber-wash: var(--gold-tint);
+  --alert: var(--coral);
+  --alert-wash: var(--coral-tint);
+  --reading-measure: 42rem;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 640px) {
   :root {
-    --fs-display: 3.35rem;
-    --fs-h1: 2.05rem;
+    --fs-display: 2.9rem;
+    --fs-h1: 1.85rem;
   }
 }

@@ -106,7 +106,7 @@ export function ChecklistView({ checklist }: { checklist: Checklist }) {
       )}
 
       {checklist.possibleBenefitCategory && (
-        <div className="result-section ask">
+        <div className="callout callout-amber">
           <h3>Possible benefit category</h3>
           <p>{checklist.possibleBenefitCategory}</p>
         </div>

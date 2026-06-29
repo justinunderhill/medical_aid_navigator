@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { SCENARIOS } from '@/data/scenarios';
-import { ScenarioIcon } from '@/components/ScenarioIcon';
 import { Disclaimer } from '@/components/Disclaimer';
 import { FeedbackForm } from '@/components/FeedbackForm';
 
@@ -46,22 +45,25 @@ export default function HomePage() {
       <section aria-labelledby="pick-situation">
         <h2 id="pick-situation" className="section-title">What&rsquo;s happening?</h2>
         <div className="scenario-grid">
-          {SCENARIOS.map((s) => (
+          {SCENARIOS.map((s, index) => (
             <Link
               key={s.id}
               href={`/scenario/${s.id}`}
-              className={`scenario-card${s.isEmergency ? ' is-emergency' : ''}`}
+              className={`scenario-card cat-${s.category}`}
             >
-              <span className="scenario-icon">
-                <ScenarioIcon name={s.icon} />
-              </span>
+              <span className="scenario-chip">{String(index + 1).padStart(2, '0')}</span>
               <span className="scenario-card-body">
-                <span className="scenario-card-title">{s.title}</span>
-                <span className="scenario-card-blurb">{s.blurb}</span>
-                <span className="scenario-card-action">Start</span>
+                <span className="scenario-title">{s.title}</span>
+                <span className="scenario-blurb">{s.blurb}</span>
+                <span className="scenario-cta">Start <span className="arr" aria-hidden>→</span></span>
               </span>
             </Link>
           ))}
+        </div>
+        <div className="legend" aria-label="Scenario categories">
+          <span><span className="dot urgent" /> Urgent</span>
+          <span><span className="dot care" /> Care &amp; planning</span>
+          <span><span className="dot claims" /> Cover &amp; claims</span>
         </div>
       </section>
 
