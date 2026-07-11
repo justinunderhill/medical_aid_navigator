@@ -31,7 +31,7 @@ self-assessment, which marks every line ✅). Where my finding differs, I say so
 | FR9 | Chronic benefit checklist | **Full** | `content/concepts/chronic-benefit.md` + chronic scenario. (Question flow itself is light — see FR3.) |
 | FR10 | Claim rejection assistant | **Full** | `claim-rejection` scenario captures rejection reason, written reasons, related category, claim type, and whether provider billing codes are available. Output/escalation guidance is present and correct. |
 | FR11 | Downloadable / copyable checklist | **Full** | `ChecklistView.tsx` — copy + download `.txt`, includes disclaimer. (Spec says "save or print"; print works via browser, no dedicated PDF.) |
-| FR12 | Feedback capture (no account, optional email, privacy notice) | **Full** | `feedback/page.tsx` + `/api/feedback`; all four fields + optional email + visible privacy line. |
+| FR12 | Feedback capture (no account, optional email, privacy notice) | **Removed** | Removed with the database — user response was minimal; deferred to a later phase. |
 | FR13 | Source & disclaimer/privacy page, reachable from all screens | **Full** | `about/page.tsx` (disclaimer + privacy), linked in the global `SiteHeader`, so reachable everywhere. |
 
 ---
@@ -67,7 +67,7 @@ self-assessment, which marks every line ✅). Where my finding differs, I say so
 
 | Item | Status | Notes |
 |---|---|---|
-| Permitted inputs (scenario, question, optional scheme/plan, flags, feedback) | **Full** | All supported. |
+| Permitted inputs (scenario, question, optional scheme/plan, flags) | **Full** | All supported. |
 | Prohibited inputs (ID, member no., medical history, card, address) | **Full** | None collected. |
 | Knowledge base coverage (PMB, emergency, DSP, auth, chronic, disputes, terms) | **Full** | All present in `/content`. |
 | **D3 — "Date all plan content" / versioned sources** (§13.5, NFR7) | **Full** | Every `/content/**/*.md` file carries a 2026-06 review-date header; the explainers UI also surfaces the knowledge review date. |
@@ -82,10 +82,10 @@ self-assessment, which marks every line ✅). Where my finding differs, I say so
 | `POST /api/navigate` | **Full** | Primary path; used by the UI. |
 | `POST /api/classify-scenario` | **Full** | Used by the triage flow before the inline `/api/navigate` checklist call. |
 | `POST /api/generate-checklist` | **Retired** | Removed as redundant unused surface area; `/api/navigate` is the single checklist-generation endpoint. |
-| `POST /api/feedback` | **Full** | — |
+| `POST /api/feedback` | **Removed** | Removed with the database; deferred to a later phase. |
 | `GET /api/health` | **Full** | — |
 
-All 7 spec screens (Home, Scenario select, Guided questions, Result, Explainers, Feedback, Disclaimer/Privacy) are present. Explainers screen meets the "10+ concepts" acceptance criterion via 7 full explainers + 3 quick definitions.
+6 of the 7 spec screens (Home, Scenario select, Guided questions, Result, Explainers, Disclaimer/Privacy) are present; the Feedback screen was removed with the database and is deferred to a later phase. Explainers screen meets the "10+ concepts" acceptance criterion via 7 full explainers + 3 quick definitions.
 
 ---
 
@@ -93,7 +93,7 @@ All 7 spec screens (Home, Scenario select, Guided questions, Result, Explainers,
 
 Against its **own** acceptance criteria (§27), the build passes all nine: full
 scenario flow, emergency-first triggering, practical output, no
-diagnosis/guarantees, copy/download, 10+ concepts, feedback, mobile, and
+diagnosis/guarantees, copy/download, 10+ concepts, mobile, and
 "suitable to demonstrate publicly as a responsible prototype." Fidelity to the
 spec is **high** — most gaps are *depth* (shorter question flows) rather than
 *missing capability*, and the one true deviation (Anthropic vs OpenAI) is an

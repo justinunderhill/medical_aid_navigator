@@ -16,9 +16,8 @@ We may process (only to give you guidance, not stored against your identity):
 - The optional free text you type
 - Optional scheme/plan name if you choose to enter it
 
-Feedback:
-- Feedback is optional and anonymous unless you choose to provide an email.
-- An email, if given, is used only to follow up on your feedback.
+We do not store any of this. The tool has no database and keeps nothing after
+your session.
 
 No account is required to use the tool. If we ever store an input, we will ask
 for clear consent first.

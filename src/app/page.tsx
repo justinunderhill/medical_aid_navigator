@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { SCENARIOS } from '@/data/scenarios';
 import { Disclaimer } from '@/components/Disclaimer';
-import { FeedbackForm } from '@/components/FeedbackForm';
 
 export default function HomePage() {
   return (
@@ -126,18 +125,6 @@ export default function HomePage() {
           live scheme systems. Always confirm directly with your medical scheme,
           healthcare provider, or accredited broker.
         </p>
-      </section>
-
-      <section className="home-feedback" aria-labelledby="home-feedback-title">
-        <div className="home-feedback-head">
-          <p className="eyebrow">Feedback</p>
-          <h2 id="home-feedback-title">Help improve this MVP</h2>
-          <p>
-            Was this useful? Tell me what confused you about your medical aid,
-            what this tool helped with, or what should be added next.
-          </p>
-        </div>
-        <FeedbackForm />
       </section>
 
       <p className="small muted home-note">

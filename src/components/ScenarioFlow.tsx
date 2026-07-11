@@ -148,23 +148,7 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
           </>
         )}
 
-        {!loading && checklist && (
-          <>
-            <ChecklistView checklist={checklist} />
-            <div className="feedback-cta">
-              <div>
-                <p className="eyebrow">Feedback</p>
-                <strong>Help improve this MVP</strong>
-                <p className="small muted">
-                  Was this useful? Tell me what confused you, what helped, or what should be added next.
-                </p>
-              </div>
-              <Link className="btn btn-primary" href={`/feedback?scenario=${scenario.id}`}>
-                Share feedback
-              </Link>
-            </div>
-          </>
-        )}
+        {!loading && checklist && <ChecklistView checklist={checklist} />}
 
         {!loading && error && (
           <div className="callout callout-amber">

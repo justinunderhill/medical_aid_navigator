@@ -19,7 +19,6 @@ suggested path from here.
    critically — this is where you tune the system prompt and knowledge files.
 3. Adjust tone/wording in `content/prompts/system-prompt.md` and the
    `content/**` knowledge to match how you want it to sound.
-4. (Optional) Wire Supabase using `supabase/schema.sql`.
 
 ## Phase 2 — Harden before any public traffic
 
@@ -30,7 +29,7 @@ suggested path from here.
 ## Phase 3 — Validate with real users
 
 1. Deploy to Vercel (private/beta).
-2. Use the feedback feature to gather signal on clarity and gaps.
+2. Gather signal on clarity and gaps from real users.
 3. Prioritise the next scenarios/explainers from real questions, not guesses.
 
 ## Phase 4 — Considered expansion (only if validated)

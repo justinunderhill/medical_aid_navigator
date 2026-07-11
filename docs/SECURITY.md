@@ -22,15 +22,13 @@ identity):
 - Optional free text the user types
 - Optional scheme/plan name the user chooses to enter
 
-The only persisted data is **optional, anonymous feedback** — and even the email
-field there is optional. See `content/core/privacy-principles.md`.
+**Nothing is persisted.** The app has no database and stores no data against an
+identity. See `content/core/privacy-principles.md`.
 
 ---
 
 ## 2. No PII in logs
 
-- The feedback path never logs a raw email. When Supabase is unconfigured it
-  logs `'[provided]'` instead of the address (`src/lib/supabase/client.ts`).
 - Error logging records error *messages*, not user input bodies
   (`src/app/api/*/route.ts`).
 - Before launch: review any added logging/analytics for the same standard.
@@ -101,22 +99,13 @@ terms) and add monitoring on fallback frequency.
 
 ## 6. Secrets
 
-- All provider keys and the Supabase **service-role** key are server-side env
-  vars. The service-role key is never imported into a client component
-  (`src/lib/supabase/client.ts` is server-only).
+- All provider keys are server-side env vars, never imported into a client
+  component.
 - `.env*` is gitignored. Only `.env.example` (placeholders) is committed.
 
 ---
 
-## 7. Supabase access model
-
-- The `feedback` table has **RLS enabled with no public policies**
-  (`supabase/schema.sql`). Writes happen only via the server using the
-  service-role key. There is no anonymous client-side write path.
-
----
-
-## 8. Pre-launch checklist
+## 7. Pre-launch checklist
 
 - [ ] Move rate limiting to a shared store (Upstash/Vercel KV).
 - [ ] Add monitoring/alerting on output-validator **hard** flags (signals the
@@ -125,4 +114,3 @@ terms) and add monitoring on fallback frequency.
       any public promotion.
 - [ ] Confirm POPIA stance with a privacy advisor if any storage is added.
 - [ ] Penetration test of the public endpoints.
-- [ ] Add CAPTCHA or similar if feedback spam appears.

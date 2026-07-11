@@ -230,46 +230,23 @@ a { color: var(--pine-deep); }
 
 .home-note { margin-top: var(--sp-8); }
 
-.mvp-limits,
-.home-feedback {
+.mvp-limits {
   margin-top: var(--sp-12);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--surface);
   box-shadow: none;
   padding: var(--sp-6);
-}
-
-.mvp-limits {
   border-left: 4px solid var(--amber);
   background: color-mix(in srgb, var(--amber-wash) 62%, var(--surface));
 }
 
-.mvp-limits h2,
-.home-feedback h2 {
+.mvp-limits h2 {
   margin: var(--sp-1) 0 var(--sp-2);
 }
 
-.mvp-limits p:last-child,
-.home-feedback-head p {
+.mvp-limits p:last-child {
   margin-bottom: 0;
   color: var(--ink-soft);
-}
-
-.home-feedback-head {
-  margin-bottom: var(--sp-5, 20px);
-  padding-bottom: var(--sp-5, 20px);
-  border-bottom: 1px solid var(--line);
-}
-
-.feedback-form {
-  display: grid;
-  gap: var(--sp-5, 20px);
-}
-
-.feedback-field {
-  display: grid;
-  gap: var(--sp-1);
 }
 
 /* ---- Homepage sample checklists ---- */
@@ -1235,34 +1212,6 @@ ol.explainer-list li::before {
   gap: var(--sp-2);
   padding: var(--sp-5, 20px) var(--sp-6);
   flex-wrap: wrap;
-}
-
-.feedback-cta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--sp-4);
-  margin-top: var(--sp-6);
-  padding: var(--sp-5, 20px);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: none;
-}
-
-.feedback-cta strong {
-  display: block;
-  margin: var(--sp-1) 0 var(--sp-1);
-  font-size: 1.05rem;
-}
-
-.feedback-cta a {
-  flex: none;
-}
-
-.feedback-cta p:last-child {
-  margin-bottom: 0;
 }
 
 /* ---- Code chip ---- */

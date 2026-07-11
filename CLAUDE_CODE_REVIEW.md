@@ -14,7 +14,7 @@
 | `npm run lint` (`next lint`) | ✅ no warnings or errors |
 | `npm run build` (production) | ✅ compiles, 22 pages generated |
 | Dev-server smoke test (from `dev-server.log`) | ✅ `POST /api/navigate 200` — fallback path fired correctly with no API key |
-| Reviewed: all 5 API routes, AI layer, safety layer, knowledge loader, data, components, supabase schema, configs, docs | — |
+| Reviewed: all API routes, AI layer, safety layer, knowledge loader, data, components, configs, docs | — |
 
 The fallback behaviour is real and works: with no `ANTHROPIC_API_KEY`, the navigate endpoint logged the error and still returned a 200 with safe guidance. That's the NFR3 ("never blank/broken") promise holding up under test.
 
@@ -24,8 +24,8 @@ The fallback behaviour is real and works: with no `ANTHROPIC_API_KEY`, the navig
 
 - **The core safety principle is correctly implemented.** `detectEmergency()` (`src/lib/safety/emergency.ts`) is deterministic, network-free, and runs *before* and *independently of* the AI in `/api/navigate`. The emergency copy is static with correct SA numbers (10177 / 112). This is the right architecture.
 - **Defense in depth on output.** Every string field of the generated checklist is run through `validateOutput()`, which softens claim guarantees, diagnosis, broker advice, PMB self-declaration, and scheme-blaming — regardless of how it arose. Belt-and-braces beyond the prompt, as intended.
-- **Graceful degradation everywhere.** AI down → safe fallback checklist. Supabase unconfigured → feedback no-ops and still confirms. JSON parse failure → fallback. Clipboard blocked → download still works.
-- **Privacy/POPIA posture is sound.** No member/ID numbers, RLS enabled with no public policies, service-role key server-side only, email never logged raw, secrets gitignored. Security headers set in `next.config.mjs`.
+- **Graceful degradation everywhere.** AI down → safe fallback checklist. JSON parse failure → fallback. Clipboard blocked → download still works.
+- **Privacy/POPIA posture is sound.** No member/ID numbers, no database or persisted data, secrets gitignored. Security headers set in `next.config.mjs`.
 - **Clean separation of content from code** (NFR7) — scenarios as typed data, knowledge as editable markdown, prompts in `/content/prompts`.
 - Documentation (ARCHITECTURE, SECURITY, REQUIREMENTS_TRACEABILITY) is unusually thorough and **matches the code** where I spot-checked it.
 

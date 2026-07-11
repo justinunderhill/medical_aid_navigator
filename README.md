@@ -35,17 +35,6 @@ available through the same provider interface by setting `AI_PROVIDER=openai`.
 | `ANTHROPIC_API_KEY` | AI (default) | from console.anthropic.com |
 | `ANTHROPIC_MODEL` | AI | defaults to `claude-sonnet-4-6` |
 | `OPENAI_API_KEY` | AI (only if `AI_PROVIDER=openai`) | required only for OpenAI mode |
-| `NEXT_PUBLIC_SUPABASE_URL` | feedback | optional — feedback no-ops without it |
-| `SUPABASE_SERVICE_ROLE_KEY` | feedback | server-side only, never exposed |
-
-The app runs **without** Supabase configured — feedback simply logs to the
-server console and still confirms to the user.
-
-### Supabase setup (optional, for feedback)
-
-1. Create a Supabase project.
-2. Run `supabase/schema.sql` in the SQL editor.
-3. Add the URL and service-role key to `.env.local`.
 
 ---
 
@@ -94,10 +83,8 @@ src/
     ai/             Provider-agnostic AI layer (Anthropic default, OpenAI swap)
     knowledge/      Loads /content to ground the AI
     safety/         Emergency detection, output validation, guards
-    supabase/       Feedback storage
   styles/           Design tokens + global CSS
 docs/               Styling guide, architecture, build plan, traceability
-supabase/           Database schema
 ```
 
 ## Editing content (no code needed)

@@ -18,7 +18,7 @@ so coverage can be verified. Status reflects the MVP foundation as built.
 | FR9 | Chronic benefit checklist | `content/concepts/chronic-benefit.md` + `chronic-condition` scenario | ✅ |
 | FR10 | Claim rejection assistant | `claim-rejection` scenario (`src/data/scenarios`, `content/scenarios/claim-rejection.md`) + `content/concepts/claims-disputes.md` | ✅ |
 | FR11 | Downloadable / copyable checklist | `src/components/ChecklistView.tsx` — copy-to-clipboard and download-as-`.txt` | ✅ |
-| FR12 | Feedback capture (no account) | `src/app/feedback/page.tsx` + `src/app/api/feedback/route.ts` + `src/lib/supabase/client.ts`; optional email only | ✅ |
+| FR12 | Feedback capture (no account) | Removed — no database at this stage; deferred to a later phase | ➖ |
 | FR13 | Source & disclaimer page | `src/app/about/page.tsx` (about + privacy), `src/components/Disclaimer.tsx` on every screen | ✅ |
 
 ## Non-Functional Requirements
@@ -30,7 +30,7 @@ so coverage can be verified. Status reflects the MVP foundation as built.
 | NFR3 | Reliability (never blank/broken) | `safeParseChecklist` fallback in `src/lib/ai/index.ts` + try/catch fallback in `src/app/api/navigate/route.ts` | ✅ |
 | NFR4 | Safety | Deterministic emergency layer + output validator (`src/lib/safety/*`); safety never depends on the AI | ✅ |
 | NFR5 | Privacy (POPIA-aware) | Data minimisation, no member/ID numbers, `content/core/privacy-principles.md`, `docs/SECURITY.md` | ✅ |
-| NFR6 | Security | Rate limiting + input sanitisation (`src/lib/safety/guards.ts`), security headers (`next.config.mjs`), RLS on feedback table | ✅ (see SECURITY.md prod note on rate limiter) |
+| NFR6 | Security | Rate limiting + input sanitisation (`src/lib/safety/guards.ts`), security headers (`next.config.mjs`) | ✅ (see SECURITY.md prod note on rate limiter) |
 | NFR7 | Maintainability | Content separated from code in `/content` + `/src/data`; provider-agnostic AI layer; documented | ✅ |
 | NFR8 | Compliance awareness | System prompt guardrails (`content/prompts/system-prompt.md`), output validator, disclaimers, scheme-neutral stance | ✅ |
 
@@ -40,7 +40,6 @@ so coverage can be verified. Status reflects the MVP foundation as built.
 |----------|-----------|--------|
 | `POST /api/navigate` | `src/app/api/navigate/route.ts` | ✅ |
 | `POST /api/classify-scenario` | `src/app/api/classify-scenario/route.ts` | ✅ |
-| `POST /api/feedback` | `src/app/api/feedback/route.ts` | ✅ |
 | `GET /api/health` | `src/app/api/health/route.ts` | ✅ |
 
 ## Open questions (section 33) — resolved for v1

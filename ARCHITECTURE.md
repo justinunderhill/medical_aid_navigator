@@ -74,6 +74,5 @@ placeholder (`content/schemes/discovery-general.md`).
 
 ## Statelessness
 
-v1 stores nothing about the user's situation. The only persisted data is
-optional, anonymous feedback. No accounts, no member numbers, no ID numbers
-(POPIA-aware, NFR5).
+v1 stores nothing. There is no database — no accounts, no member numbers, no ID
+numbers, and nothing persisted about the user's situation (POPIA-aware, NFR5).
