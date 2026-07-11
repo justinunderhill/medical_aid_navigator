@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { ShareButton } from '@/components/ShareButton';
+import { BrandMark } from '@/components/BrandMark';
 
 export function SiteHeader() {
   return (
     <header className="site-header">
       <Link href="/" className="wordmark">
-        <span className="wordmark-badge" aria-hidden>MN</span>
+        <BrandMark className="wordmark-badge" />
         <span>
           Medical Aid Navigator
           <span className="wordmark-sub">Know what to ask first</span>

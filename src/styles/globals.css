@@ -127,7 +127,7 @@ a { color: var(--pine-deep); }
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
   padding: var(--sp-4);
 }
 
@@ -153,19 +153,31 @@ a { color: var(--pine-deep); }
 }
 
 .home-hero {
-  max-width: 50rem;
-  margin-bottom: var(--sp-10);
+  display: grid;
+  gap: var(--sp-8);
+  align-items: center;
+  margin-bottom: var(--sp-12);
 }
+@media (min-width: 900px) {
+  .home-hero {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--sp-12);
+  }
+}
+
+.hero-copy { max-width: 34rem; }
 .home-hero .h-display { margin: var(--sp-3) 0; max-width: 15ch; }
+.home-hero .h-display .hl {
+  color: var(--mint-deep);
+  font-style: italic;
+}
 .home-hero .lead {
-  margin-top: var(--sp-5, 20px);
+  margin-top: var(--sp-5);
   font-size: 1.08rem;
-  max-width: 46rem;
   color: var(--ink-soft);
 }
 .home-value-line {
   display: block;
-  max-width: 37rem;
   margin: var(--sp-4) 0 0;
   color: var(--ink);
   font-size: 1.18rem;
@@ -175,43 +187,132 @@ a { color: var(--pine-deep); }
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-2);
+  gap: var(--sp-3);
   margin-top: var(--sp-6);
 }
 
-.trust-row {
+/* Trust bar — quiet and integrated (not marketplace pill-chips). */
+.trust-bar {
+  list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-2);
+  gap: var(--sp-2) var(--sp-5);
   margin-top: var(--sp-6);
+  padding: 0;
 }
-
-.trust-row span {
+.trust-bar li {
   display: inline-flex;
-  min-height: 30px;
   align-items: center;
-  padding: 0 var(--sp-3);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 70%, var(--bone));
+  gap: 6px;
   color: var(--ink-soft);
   font-size: var(--fs-small);
   font-weight: 600;
 }
+.trust-bar svg { color: var(--mint-deep); flex: none; }
 
-/* Hero entrance — a calm, staggered rise on first paint. Gated on
-   no-preference so reduced-motion users get the hero fully visible and static
-   (never hidden behind an animation, and no JS dependency). */
+/* Floating decision-brief preview — shows the product itself, with depth. */
+.hero-preview {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.hero-preview::before {
+  content: "";
+  position: absolute;
+  inset: -14% -8% -20% -8%;
+  background:
+    radial-gradient(58% 52% at 72% 22%, color-mix(in srgb, var(--mint) 36%, transparent), transparent 70%),
+    radial-gradient(56% 60% at 24% 82%, color-mix(in srgb, var(--pine) 22%, transparent), transparent 72%);
+  filter: blur(10px);
+  z-index: 0;
+}
+.hero-preview-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 24rem;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--line) 70%, var(--surface));
+  border-radius: 18px;
+  box-shadow: var(--shadow-float);
+  padding: var(--sp-5);
+}
+.hpc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--line);
+}
+.hpc-kicker {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pine);
+}
+.hpc-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: var(--bone);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.hpc-list { display: grid; gap: var(--sp-3); }
+.hpc-row {
+  display: flex;
+  gap: var(--sp-3);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.hpc-row::before {
+  content: "";
+  width: 3px;
+  flex: none;
+  align-self: stretch;
+  border-radius: 2px;
+  background: var(--pine);
+}
+.hpc-row.ask::before { background: var(--gold); }
+.hpc-row.warn::before { background: var(--coral); }
+.hpc-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--line);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--pine);
+}
+.hpc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 0 4px var(--mint-tint);
+  flex: none;
+}
+
+/* Hero entrance — calm staggered rise (motion-safe, no-JS-safe). */
 @media (prefers-reduced-motion: no-preference) {
-  .home-hero > * {
+  .hero-copy > * { animation: hero-rise var(--dur-reveal) var(--ease-out) both; }
+  .hero-copy > *:nth-child(1) { animation-delay: 40ms; }
+  .hero-copy > *:nth-child(2) { animation-delay: 110ms; }
+  .hero-copy > *:nth-child(3) { animation-delay: 180ms; }
+  .hero-copy > *:nth-child(4) { animation-delay: 250ms; }
+  .hero-copy > *:nth-child(5) { animation-delay: 320ms; }
+  .hero-copy > *:nth-child(6) { animation-delay: 390ms; }
+  .hero-preview {
     animation: hero-rise var(--dur-reveal) var(--ease-out) both;
+    animation-delay: 220ms;
   }
-  .home-hero > *:nth-child(1) { animation-delay: 40ms; }
-  .home-hero > *:nth-child(2) { animation-delay: 120ms; }
-  .home-hero > *:nth-child(3) { animation-delay: 200ms; }
-  .home-hero > *:nth-child(4) { animation-delay: 280ms; }
-  .home-hero > *:nth-child(5) { animation-delay: 360ms; }
-  .home-hero > *:nth-child(6) { animation-delay: 440ms; }
 }
 @keyframes hero-rise {
   from { opacity: 0; transform: translateY(12px); }
@@ -304,7 +405,7 @@ a { color: var(--pine-deep); }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
   padding: var(--sp-6);
 }
 
@@ -418,7 +519,7 @@ a { color: var(--pine-deep); }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
   padding: var(--sp-4);
 }
 
@@ -563,7 +664,7 @@ a { color: var(--pine-deep); }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
   border-top: 3px solid color-mix(in srgb, var(--pine) 30%, var(--line));
 }
 
@@ -592,7 +693,7 @@ a { color: var(--pine-deep); }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
 }
 
 .about-panel-head {
@@ -731,7 +832,7 @@ a { color: var(--pine-deep); }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
   padding: var(--sp-4);
 }
 
@@ -781,7 +882,7 @@ a { color: var(--pine-deep); }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
 }
 
 .definition-grid {
@@ -820,7 +921,7 @@ a { color: var(--pine-deep); }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
 }
 
 .explainer-article-head {
@@ -954,10 +1055,11 @@ ol.explainer-list li::before {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: var(--sp-4);
+  padding: var(--sp-5);
   overflow: hidden;
   color: inherit;
   text-decoration: none;
+  box-shadow: var(--shadow-card);
   transition: transform var(--dur-move) var(--ease-out),
     box-shadow var(--dur-move) var(--ease-out),
     border-color var(--dur-move) var(--ease-out);
@@ -1193,7 +1295,7 @@ ol.explainer-list li::before {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--shadow-card);
 }
 
 .question-panel {
@@ -1347,14 +1449,10 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
 .wordmark-badge {
   width: 34px;
   height: 34px;
-  border-radius: 9px;
-  background: var(--pine);
   display: inline-grid;
   place-items: center;
-  color: #fff;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 500;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px -4px rgba(12, 42, 39, 0.45);
 }
 
 .site-footer {
