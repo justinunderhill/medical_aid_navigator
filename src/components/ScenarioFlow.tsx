@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowLeft, ShieldAlert } from 'lucide-react';
 import type { Scenario, Question } from '@/data/scenarios';
 import { ChecklistView, type Checklist } from '@/components/ChecklistView';
 import { EmergencyBanner } from '@/components/EmergencyBanner';
 import { Disclaimer } from '@/components/Disclaimer';
+import { viewVariants } from '@/lib/motion';
 
 type AnswerValue = string | boolean | string[];
 
@@ -30,6 +32,14 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
 
   const questions = scenario.questions;
   const onResult = step >= questions.length;
+  const reduce = useReducedMotion() ?? false;
+  // Memoised so the variants object keeps a stable identity across renders —
+  // a fresh object each render makes framer-motion re-init the animation.
+  const view = useMemo(() => viewVariants(reduce), [reduce]);
+  // First paint (server-rendered / pre-hydration) renders visible so no-JS and
+  // safety content is never hidden. Only view changes after mount animate in.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const setAnswer = (id: string, value: AnswerValue) =>
     setAnswers((a) => ({ ...a, [id]: value }));
@@ -118,155 +128,186 @@ export function ScenarioFlow({ scenario }: { scenario: Scenario }) {
     }
   };
 
-  // ---- Result view ----
-  if (onResult) {
-    return (
-      <main className="shell">
-        <Link href="/" className="link-quiet" style={{ display: 'inline-flex', gap: 4, marginBottom: 'var(--sp-4)' }}>
-          <ArrowLeft size={16} /> Start over
-        </Link>
-        <div className="case-header">
-          <p className="eyebrow">Case output</p>
-          <h1>{scenario.title}</h1>
-          <p className="case-blurb">{scenario.blurb}</p>
-          <div className="case-meta">
-            <span className="case-pill">{emergency ? 'urgent guidance' : 'decision brief'}</span>
-            <span className="case-pill">confirm with scheme</span>
+  // A single stable key per "view" so AnimatePresence can crossfade between
+  // them. Question steps get their own key so stepping animates too.
+  const viewKey = !emergencyGateComplete
+    ? 'gate'
+    : onResult
+      ? loading
+        ? 'generating'
+        : 'result'
+      : `q-${step}`;
+
+  // A keyed motion.div per view: when the key changes React mounts a fresh
+  // element and the enter animation plays. No AnimatePresence/exit — the
+  // exiting view is simply replaced — which avoids mode="wait" exit-hang and
+  // keeps swaps snappy. `initial` is gated on `mounted` so the first
+  // server-rendered paint (incl. the emergency gate) is visible without JS.
+  return (
+    <main className="shell">
+      <motion.div
+        key={viewKey}
+        variants={view}
+        initial={mounted ? 'initial' : false}
+        animate="animate"
+      >
+        {renderView()}
+      </motion.div>
+    </main>
+  );
+
+  function renderView() {
+    // ---- Result / generating / emergency / error ----
+    if (onResult) {
+      return (
+        <>
+          <Link href="/" className="link-quiet" style={{ display: 'inline-flex', gap: 4, marginBottom: 'var(--sp-4)' }}>
+            <ArrowLeft size={16} /> Start over
+          </Link>
+          <div className="case-header">
+            <p className="eyebrow">Case output</p>
+            <h1>{scenario.title}</h1>
+            <p className="case-blurb">{scenario.blurb}</p>
+            <div className="case-meta">
+              <span className="case-pill">{emergency ? 'urgent guidance' : 'decision brief'}</span>
+              <span className="case-pill">confirm with scheme</span>
+            </div>
           </div>
-        </div>
 
-        {loading && <GeneratingChecklist />}
+          {loading && <GeneratingChecklist reduce={reduce} />}
 
-        {!loading && emergency && (
-          <>
-            <EmergencyBanner
-              headline={emergency.headline}
-              body={emergency.body}
-              afterCare={emergency.afterCare}
-            />
-            <Disclaimer />
-          </>
-        )}
+          {!loading && emergency && (
+            <>
+              <EmergencyBanner
+                headline={emergency.headline}
+                body={emergency.body}
+                afterCare={emergency.afterCare}
+              />
+              <Disclaimer />
+            </>
+          )}
 
-        {!loading && checklist && <ChecklistView checklist={checklist} />}
+          {!loading && checklist && <ChecklistView checklist={checklist} />}
 
-        {!loading && error && (
-          <div className="callout callout-amber">
-            <strong>We hit a snag.</strong>
-            <p style={{ margin: '4px 0 0' }}>{error}</p>
-          </div>
-        )}
-      </main>
-    );
-  }
+          {!loading && error && (
+            <div className="callout callout-amber">
+              <strong>We hit a snag.</strong>
+              <p style={{ margin: '4px 0 0' }}>{error}</p>
+            </div>
+          )}
+        </>
+      );
+    }
 
-  if (!emergencyGateComplete) {
+    // ---- Emergency gate ----
+    if (!emergencyGateComplete) {
+      return (
+        <>
+          <Link href="/" className="link-quiet" style={{ display: 'inline-flex', gap: 4, marginBottom: 'var(--sp-4)' }}>
+            <ArrowLeft size={16} /> Back to situations
+          </Link>
+
+          <section className="emergency-gate" aria-labelledby="emergency-gate-title">
+            <div className="emergency-gate-icon" aria-hidden>
+              <ShieldAlert size={26} />
+            </div>
+            <p className="eyebrow">Emergency first</p>
+            <h1 id="emergency-gate-title">{scenario.title}</h1>
+            <p>
+              If severe symptoms are present, do not use this tool before seeking urgent care.
+              Get medical help first; benefit questions can wait until care is underway.
+            </p>
+            <div className="emergency-gate-actions">
+              <button className="btn btn-alert" onClick={showUrgentGuidance}>
+                I need urgent help now
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setAnswer('emergencyGate', 'Care is already underway');
+                  setEmergencyGateComplete(true);
+                }}
+              >
+                Care is already underway
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  setAnswer('emergencyGate', 'I need after-care documentation guidance');
+                  setEmergencyGateComplete(true);
+                }}
+              >
+                I need after-care documentation guidance
+              </button>
+            </div>
+          </section>
+
+          <Disclaimer />
+        </>
+      );
+    }
+
+    // ---- Question view ----
+    const q = questions[step];
+    const isLast = step === questions.length - 1;
+    const progress = `${Math.round(((step + 1) / questions.length) * 100)}%`;
+
     return (
-      <main className="shell">
+      <>
         <Link href="/" className="link-quiet" style={{ display: 'inline-flex', gap: 4, marginBottom: 'var(--sp-4)' }}>
           <ArrowLeft size={16} /> Back to situations
         </Link>
 
-        <section className="emergency-gate" aria-labelledby="emergency-gate-title">
-          <div className="emergency-gate-icon" aria-hidden>
-            <ShieldAlert size={26} />
+        <div className="case-header">
+          <p className="eyebrow">Case intake</p>
+          <h1>{scenario.title}</h1>
+          <p className="case-blurb">{scenario.blurb}</p>
+          <div className="case-meta">
+            <span className="case-pill">Question {step + 1} of {questions.length}</span>
+            <span className="case-pill">{scenario.isEmergency ? 'urgent path' : 'benefit checklist'}</span>
           </div>
-          <p className="eyebrow">Emergency first</p>
-          <h1 id="emergency-gate-title">{scenario.title}</h1>
-          <p>
-            If severe symptoms are present, do not use this tool before seeking urgent care.
-            Get medical help first; benefit questions can wait until care is underway.
-          </p>
-          <div className="emergency-gate-actions">
-            <button className="btn btn-alert" onClick={showUrgentGuidance}>
-              I need urgent help now
-            </button>
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setAnswer('emergencyGate', 'Care is already underway');
-                setEmergencyGateComplete(true);
-              }}
-            >
-              Care is already underway
-            </button>
-            <button
-              className="btn btn-secondary"
-              onClick={() => {
-                setAnswer('emergencyGate', 'I need after-care documentation guidance');
-                setEmergencyGateComplete(true);
-              }}
-            >
-              I need after-care documentation guidance
-            </button>
+        </div>
+
+        <section className="question-panel">
+          <div className="question-head">
+            <div className="step-track" aria-hidden>
+              <div className="step-fill" style={{ width: progress }} />
+            </div>
+            <p className="small muted" style={{ marginBottom: 0 }}>
+              Answer only what you know. The checklist will focus on what to confirm next.
+            </p>
+            <p className="field-privacy-note">{FREE_TEXT_PRIVACY_NOTICE}</p>
+          </div>
+
+          <QuestionField question={q} value={answers[q.id]} onChange={(v) => setAnswer(q.id, v)} />
+
+          <div className="question-actions">
+            {step > 0 && (
+              <button className="btn btn-secondary" onClick={() => setStep((s) => s - 1)}>
+                <ArrowLeft size={18} /> Back
+              </button>
+            )}
+            {!isLast ? (
+              <button className="btn btn-primary" onClick={() => setStep((s) => s + 1)}>
+                Next <ArrowRight size={18} />
+              </button>
+            ) : (
+              <button className="btn btn-primary" onClick={submit}>
+                Generate checklist <ArrowRight size={18} />
+              </button>
+            )}
+            {q.optional && (
+              <button className="link-quiet" onClick={() => (isLast ? submit() : setStep((s) => s + 1))}>
+                Skip
+              </button>
+            )}
           </div>
         </section>
 
         <Disclaimer />
-      </main>
+      </>
     );
   }
-
-  // ---- Question view ----
-  const q = questions[step];
-  const isLast = step === questions.length - 1;
-  const progress = `${Math.round(((step + 1) / questions.length) * 100)}%`;
-
-  return (
-    <main className="shell">
-      <Link href="/" className="link-quiet" style={{ display: 'inline-flex', gap: 4, marginBottom: 'var(--sp-4)' }}>
-        <ArrowLeft size={16} /> Back to situations
-      </Link>
-
-      <div className="case-header">
-        <p className="eyebrow">Case intake</p>
-        <h1>{scenario.title}</h1>
-        <p className="case-blurb">{scenario.blurb}</p>
-        <div className="case-meta">
-          <span className="case-pill">Question {step + 1} of {questions.length}</span>
-          <span className="case-pill">{scenario.isEmergency ? 'urgent path' : 'benefit checklist'}</span>
-        </div>
-      </div>
-
-      <section className="question-panel">
-        <div className="question-head">
-          <div className="step-track" aria-hidden>
-            <div className="step-fill" style={{ width: progress }} />
-          </div>
-          <p className="small muted" style={{ marginBottom: 0 }}>
-            Answer only what you know. The checklist will focus on what to confirm next.
-          </p>
-          <p className="field-privacy-note">{FREE_TEXT_PRIVACY_NOTICE}</p>
-        </div>
-
-        <QuestionField question={q} value={answers[q.id]} onChange={(v) => setAnswer(q.id, v)} />
-
-        <div className="question-actions">
-          {step > 0 && (
-            <button className="btn btn-secondary" onClick={() => setStep((s) => s - 1)}>
-              <ArrowLeft size={18} /> Back
-            </button>
-          )}
-          {!isLast ? (
-            <button className="btn btn-primary" onClick={() => setStep((s) => s + 1)}>
-              Next <ArrowRight size={18} />
-            </button>
-          ) : (
-            <button className="btn btn-primary" onClick={submit}>
-              Generate checklist <ArrowRight size={18} />
-            </button>
-          )}
-          {q.optional && (
-            <button className="link-quiet" onClick={() => (isLast ? submit() : setStep((s) => s + 1))}>
-              Skip
-            </button>
-          )}
-        </div>
-      </section>
-
-      <Disclaimer />
-    </main>
-  );
 }
 
 const GENERATING_STEPS = [
@@ -276,7 +317,7 @@ const GENERATING_STEPS = [
   'Putting your checklist together',
 ];
 
-function GeneratingChecklist() {
+function GeneratingChecklist({ reduce }: { reduce: boolean }) {
   const [seconds, setSeconds] = useState(0);
   const [stepIndex, setStepIndex] = useState(0);
 
@@ -294,9 +335,9 @@ function GeneratingChecklist() {
   }, []);
 
   return (
-    <div className="generating" role="status" aria-live="polite">
+    <div className="generating">
       <div className="generating-head">
-        <span className="spinner" />
+        <span className="spinner" aria-hidden />
         <div>
           <strong>Building your checklist…</strong>
           <p className="small muted" style={{ margin: '2px 0 0' }}>
@@ -308,6 +349,8 @@ function GeneratingChecklist() {
         </span>
       </div>
 
+      {/* Visible, decorative step list — colour/dot state transitions in CSS.
+          Announced separately below (this list is aria-hidden). */}
       <ul className="generating-steps" aria-hidden>
         {GENERATING_STEPS.map((label, i) => (
           <li
@@ -321,6 +364,11 @@ function GeneratingChecklist() {
           </li>
         ))}
       </ul>
+
+      {/* Screen-reader announcement of the current stage. */}
+      <p className="sr-only" role="status" aria-live="polite">
+        Building your checklist. {GENERATING_STEPS[stepIndex]}.
+      </p>
     </div>
   );
 }

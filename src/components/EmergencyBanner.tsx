@@ -10,8 +10,8 @@ export function EmergencyBanner({ headline, body, afterCare }: Props) {
   return (
     <div className="callout callout-emergency" role="alert">
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
-        <Siren size={20} color="var(--alert)" aria-hidden />
-        <strong style={{ color: 'var(--alert)' }}>{headline}</strong>
+        <Siren size={20} color="var(--coral)" aria-hidden />
+        <strong style={{ color: 'var(--coral)' }}>{headline}</strong>
       </div>
       {body.map((line, i) => (
         <p key={i} style={{ marginBottom: '8px' }}>{line}</p>

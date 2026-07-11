@@ -46,8 +46,10 @@
   --sp-2: 8px;
   --sp-3: 12px;
   --sp-4: 16px;
+  --sp-5: 20px;
   --sp-6: 24px;
   --sp-8: 32px;
+  --sp-10: 40px;
   --sp-12: 48px;
   --sp-16: 64px;
 
@@ -59,19 +61,20 @@
     0 1px 2px rgba(18, 58, 54, 0.04), 0 8px 24px rgba(18, 58, 54, 0.06);
   --shadow-hover: 0 6px 22px rgba(18, 58, 54, 0.10);
   --ring: 0 0 0 2px var(--bone), 0 0 0 4px var(--pine);
+  --reading-measure: 42rem;
 
-  /* ---- Compatibility aliases for existing app sections not replaced by v2 ---- */
-  --paper: var(--bone);
+  /* ---- Neutral surface helpers ---- */
   --surface-2: #eeebe4;
   --line-strong: #bdb5a8;
-  --teal: var(--pine);
-  --teal-deep: var(--pine-deep);
-  --teal-wash: var(--pine-tint);
-  --amber: var(--gold);
-  --amber-wash: var(--gold-tint);
-  --alert: var(--coral);
-  --alert-wash: var(--coral-tint);
-  --reading-measure: 42rem;
+
+  /* ---- Motion ----
+     Calm, trustworthy easing. Soft ease-out, no bounce. Durations kept short
+     for micro-interactions; the brief-assembly reveal is the one longer moment. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 180ms;
+  --dur-move: 260ms;
+  --dur-reveal: 480ms;
 }
 
 @media (min-width: 640px) {

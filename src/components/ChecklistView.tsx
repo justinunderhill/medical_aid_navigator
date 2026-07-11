@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
 import { Copy, Check, Download } from 'lucide-react';
 import { buildChecklistPdf } from '@/lib/pdf/checklistPdf';
+import { briefContainer, briefItem } from '@/lib/motion';
 
 export interface Checklist {
   scenarioSummary: string;
@@ -25,22 +27,24 @@ function Section({
   title,
   items,
   variant = 'do',
+  itemVariants,
 }: {
   title: string;
   items: string[];
   variant?: 'do' | 'ask' | 'warn';
+  itemVariants: Variants;
 }) {
   if (!items || items.length === 0) return null;
   const cls = variant === 'ask' ? 'ask' : variant === 'warn' ? 'warn' : '';
   return (
-    <div className={`result-section ${cls}`}>
+    <motion.div className={`result-section ${cls}`} variants={itemVariants}>
       <h3>{title}</h3>
       <ul>
         {items.map((it, i) => (
           <li key={i}>{it}</li>
         ))}
       </ul>
-    </div>
+    </motion.div>
   );
 }
 
@@ -71,6 +75,9 @@ function toPlainText(c: Checklist): string {
 
 export function ChecklistView({ checklist }: { checklist: Checklist }) {
   const [copied, setCopied] = useState(false);
+  const reduce = useReducedMotion() ?? false;
+  const container = useMemo(() => briefContainer(reduce), [reduce]);
+  const item = useMemo(() => briefItem(reduce), [reduce]);
 
   const copy = async () => {
     try {
@@ -88,43 +95,48 @@ export function ChecklistView({ checklist }: { checklist: Checklist }) {
   };
 
   return (
-    <div className="reveal checklist-document">
-      <header className="checklist-header">
+    <motion.div
+      className="checklist-document"
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.header className="checklist-header" variants={item}>
         <p className="eyebrow">Decision brief</p>
         {checklist.scenarioSummary && (
           <p className="muted">
             {checklist.scenarioSummary}
           </p>
         )}
-      </header>
+      </motion.header>
 
       {checklist.immediateNextStep && (
-        <div className="result-section">
+        <motion.div className="result-section" variants={item}>
           <h3>Immediate next step</h3>
           <p>{checklist.immediateNextStep}</p>
-        </div>
+        </motion.div>
       )}
 
       {checklist.possibleBenefitCategory && (
-        <div className="callout callout-amber">
+        <motion.div className="callout callout-amber" variants={item}>
           <h3>Possible benefit category</h3>
           <p>{checklist.possibleBenefitCategory}</p>
-        </div>
+        </motion.div>
       )}
 
-      <Section title="Ask your scheme" items={checklist.askYourScheme} variant="ask" />
-      <Section title="Ask your provider or doctor" items={checklist.askYourProvider} variant="ask" />
-      <Section title="Codes and documents to request" items={checklist.documentsToRequest} />
-      <Section title="Cost or co-payment risks to check" items={checklist.riskAreas} variant="warn" />
-      <Section title="What not to do" items={checklist.whatNotToDo} variant="warn" />
-      <Section title="If you need to escalate" items={checklist.escalationSteps} />
+      <Section title="Ask your scheme" items={checklist.askYourScheme} variant="ask" itemVariants={item} />
+      <Section title="Ask your provider or doctor" items={checklist.askYourProvider} variant="ask" itemVariants={item} />
+      <Section title="Codes and documents to request" items={checklist.documentsToRequest} itemVariants={item} />
+      <Section title="Cost or co-payment risks to check" items={checklist.riskAreas} variant="warn" itemVariants={item} />
+      <Section title="What not to do" items={checklist.whatNotToDo} variant="warn" itemVariants={item} />
+      <Section title="If you need to escalate" items={checklist.escalationSteps} itemVariants={item} />
 
-      <div className="result-section ask">
+      <motion.div className="result-section ask" variants={item}>
         <h3>Confirm before proceeding</h3>
         <p>{CONFIRMATION_REMINDER}</p>
-      </div>
+      </motion.div>
 
-      <div className="checklist-actions">
+      <motion.div className="checklist-actions" variants={item}>
         <button className="btn btn-primary" onClick={copy}>
           {copied ? <Check size={18} /> : <Copy size={18} />}
           {copied ? 'Copied' : 'Copy checklist'}
@@ -132,13 +144,13 @@ export function ChecklistView({ checklist }: { checklist: Checklist }) {
         <button className="btn btn-secondary" onClick={download}>
           <Download size={18} /> Download PDF
         </button>
-      </div>
+      </motion.div>
 
       {checklist.disclaimer && (
-        <p className="small muted" style={{ padding: '0 var(--sp-4) var(--sp-4)' }}>
+        <motion.p className="small muted" style={{ padding: '0 var(--sp-4) var(--sp-4)' }} variants={item}>
           {checklist.disclaimer}
-        </p>
+        </motion.p>
       )}
-    </div>
+    </motion.div>
   );
 }

@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <main className="home">
       <section className="home-hero">
-        <p className="eyebrow">A real-time medical aid navigation MVP</p>
+        <p className="eyebrow">Medical aid navigation</p>
         <h1 className="h-display">
           Know what to ask before you use your medical aid.
         </h1>

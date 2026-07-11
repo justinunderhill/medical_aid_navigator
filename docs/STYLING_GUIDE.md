@@ -5,7 +5,9 @@
 > Every choice serves calm, legibility, and trust — never decoration.
 
 This guide is the single source of truth for the visual system. All design
-tokens live in `src/styles/tokens.css` and are referenced here.
+tokens live in `src/styles/tokens.css`; component rules live in
+`src/styles/globals.css`. This document describes intent — the tokens are
+authoritative for exact values.
 
 ---
 
@@ -22,63 +24,72 @@ undercut trust here.
 
 ---
 
-## 2. Colour
+## 2. Colour — one signal vocabulary
 
-A restrained, meaningful palette. Colour carries **status**, not mood.
+Colour carries **status and category**, not mood. The core idea: **three
+category colours that mean the same thing everywhere.**
+
+- **coral** = urgent / emergency
+- **pine** = care & planning (also the brand / primary colour)
+- **violet** = cover & claims (admin)
 
 | Token | Hex | Role |
 |---|---|---|
-| `--ink` | `#13232B` | Primary text — deep desaturated teal-charcoal, softer than black |
-| `--ink-soft` | `#4A5D63` | Secondary text, captions |
-| `--paper` | `#F7F5F0` | Page background — warm paper, low glare on mobile |
-| `--surface` | `#FFFFFF` | Cards, raised surfaces |
-| `--line` | `#E2DED5` | Hairlines, borders |
-| `--teal` | `#0E6E66` | Primary brand / actions — trustworthy, clinical-calm green-teal |
-| `--teal-deep` | `#0A4F49` | Hover/active, headings accent |
-| `--teal-wash` | `#E6F0EE` | Tinted panels, selected states |
-| `--amber` | `#B5731A` | "Ask / check / confirm" caution — the navigator's signature status colour |
-| `--amber-wash` | `#FBF1E2` | Caution panel background |
-| `--alert` | `#B3261E` | EMERGENCY ONLY — never used decoratively |
-| `--alert-wash` | `#FBEAE8` | Emergency panel background |
+| `--ink` | `#16231f` | Primary text — deep desaturated green-charcoal, softer than black |
+| `--ink-soft` | `#5c6b65` | Secondary text, captions |
+| `--bone` | `#f1eee6` | Page background — warm paper, low glare on mobile |
+| `--surface` | `#ffffff` | Cards, raised surfaces |
+| `--line` | `#e2ddd0` | Hairlines, borders |
+| `--pine` | `#123a36` | Brand / primary actions / "do this" — trustworthy, clinical-calm |
+| `--pine-deep` | `#0c2a27` | Hover / active, heading accents |
+| `--pine-tint` | `#e5efec` | Tinted panels, selected states |
+| `--gold` | `#b5731a` | "Ask / check / confirm" — the navigator's signature caution status |
+| `--gold-tint` | `#f8efdd` | Caution panel background |
+| `--coral` | `#c2410c` | Urgent / emergency / "what not to do" — the safety signal |
+| `--coral-deep` | `#9a330a` | Emergency hover / active |
+| `--coral-tint` | `#fbeee7` | Emergency & caution-warn panel background |
+| `--violet` | `#6b5ba8` | Cover & claims (admin) category |
+| `--violet-tint` | `#e9e5f5` | Cover & claims panel background |
 
-**Rule:** `--alert` red is reserved exclusively for the emergency safety layer.
-If red appears anywhere else, it dilutes the one signal that must never be
-missed. Caution/uncertainty uses **amber**, never red.
+**Rule:** `--coral` carries the safety signal — emergency states and the
+"what not to do / cost risk" rails. It must stay meaningful; never use it
+decoratively. Ordinary caution / "confirm with your scheme" uses **gold**.
 
-Contrast: body text (`--ink` on `--paper`) and all interactive text meet
-WCAG AA. Never rely on colour alone — pair every status colour with an icon
-and a text label.
+Never rely on colour alone — pair every status colour with an icon and a text
+label. Body and interactive text meet WCAG AA on their backgrounds.
 
 ---
 
 ## 3. Typography
 
-Two families, chosen for trust and screen legibility, not novelty.
+Three families, loaded via `next/font` (see `src/app/layout.tsx`), chosen for
+trust and screen legibility, not novelty.
 
-- **Display / headings:** `"Fraunces", Georgia, serif` — a warm, slightly
+- **Display / headings:** `Fraunces` (`--font-display`) — a warm, slightly
   literary serif used **only** at large sizes for headings and the wordmark.
-  It signals "considered and human," which counters the cold-system feeling
-  people dread from medical aid.
-- **Body / UI:** `"Inter", system-ui, sans-serif` — neutral, highly legible at
-  small sizes on mobile, excellent for dense checklists.
-- **Utility / data:** `"IBM Plex Mono", monospace` — for codes the user will
+  It signals "considered and human," countering the cold-system feeling people
+  dread from medical aid.
+- **Body / UI:** `Inter` (`--font-body`) — neutral, highly legible at small
+  sizes on mobile, excellent for dense checklists.
+- **Utility / data:** `IBM Plex Mono` (`--font-mono`) — for codes the user will
   copy (ICD-10, authorisation numbers, tariff codes). Monospacing makes codes
   scannable and signals "this is a literal value to write down."
 
-### Type scale (mobile-first, rem)
+### Type scale (mobile-first, scales up at ≥640px)
 
-| Token | Size / line | Use |
+| Token | Mobile → ≥640px | Use |
 |---|---|---|
-| `--fs-display` | 2.0rem / 1.15 | Page hero heading |
-| `--fs-h1` | 1.5rem / 1.2 | Screen titles |
-| `--fs-h2` | 1.2rem / 1.3 | Section headings |
-| `--fs-body` | 1.0rem / 1.55 | Body, checklist items |
-| `--fs-small` | 0.85rem / 1.45 | Captions, disclaimers |
-| `--fs-code` | 0.9rem / 1.4 | Codes (mono) |
+| `--fs-display` | 2.1rem → 2.9rem | Page hero heading |
+| `--fs-h1` | 1.5rem → 1.85rem | Screen titles |
+| `--fs-h2` | 1.2rem | Section headings |
+| `--fs-lead` | 1.5rem | Lead paragraph |
+| `--fs-body` | 1.0rem | Body, checklist items |
+| `--fs-small` | 0.85rem | Captions, disclaimers |
+| `--fs-code` | 0.9rem | Codes (mono) |
 
-Headings use Fraunces at `--fs-h1`+ only. Everything ≤ h2 in dense UI uses
-Inter for clarity. Sentence case everywhere. No all-caps except small eyebrow
-labels with `letter-spacing: 0.08em`.
+Headings use Fraunces at `--fs-h1`+ only; dense UI ≤ h2 uses Inter for clarity.
+Sentence case everywhere. No all-caps except small eyebrow labels with
+`letter-spacing` ~0.06em.
 
 ---
 
@@ -86,43 +97,47 @@ labels with `letter-spacing: 0.08em`.
 
 Mobile-first. Single column, generous vertical rhythm, comfortable tap targets.
 
-- Spacing scale (`--sp-*`): 4, 8, 12, 16, 24, 32, 48, 64 px.
-- Content max-width: `--measure: 40rem` (≈640px) — keeps line length readable
-  on desktop; full-width on mobile with `--sp-16` gutters.
+- Spacing scale (`--sp-*`): 4, 8, 12, 16, 20, 24, 32, 40, 48, 64 px.
+- Content width: `--reading-measure: 42rem` for prose shells; `--measure: 44rem`
+  for wider desktop layouts.
 - Tap targets: minimum 44×44px.
-- Border radius: `--radius: 14px` for cards, `--radius-sm: 8px` for inputs and
+- Border radius: `--radius: 12px` for cards, `--radius-sm: 8px` for inputs and
   chips. Soft but not pill-shaped — calm, not playful.
-- Cards: `--surface` on `--paper`, 1px `--line` border, soft shadow
-  `0 1px 2px rgba(19,35,43,.04), 0 8px 24px rgba(19,35,43,.05)`.
+- Cards: `--surface` on `--bone`, 1px `--line` border, restrained shadow
+  (`--shadow-card`).
 
 ### Signature element
 
 The **status rail**: every checklist section is introduced by a short vertical
-coloured rail (4px) on its left edge in the section's status colour — teal for
-"do this", amber for "ask/confirm", red for emergency. It turns the checklist
-into a glanceable wayfinding strip: a stressed reader can scan the left edge
-and immediately see what is action vs. what is a question to ask. This is the
-one memorable device; everything else stays quiet.
+coloured rail on its left edge in the section's status colour — pine for "do
+this", gold for "ask / confirm", coral for caution / what-not-to-do. It turns
+the checklist into a glanceable wayfinding strip: a stressed reader can scan the
+left edge and immediately see what is action vs. what is a question to ask. The
+scenario cards echo the same logic via `cat-urgent` / `cat-care` / `cat-claims`.
 
 ---
 
 ## 5. Components
 
-- **Scenario card:** icon (lucide) in a teal-wash rounded square, title
-  (Inter 600), one-line blurb (`--ink-soft`). Whole card is tappable, with a
-  clear focus ring (`2px solid --teal`, 2px offset).
-- **Buttons:** primary = solid `--teal`, white text; hover `--teal-deep`.
-  Secondary = `--surface` with `--line` border. Destructive styling is **not
-  used** — nothing here deletes user data. Emergency actions use `--alert`.
-- **Inputs / choices:** large radio "chips" for guided questions; selected =
-  `--teal-wash` fill + `--teal` border. Free-text uses a calm bordered
-  textarea. "Skip" is always a quiet text link (FR3: users can skip).
-- **Caution callout:** amber-wash panel, amber rail, info icon — used for
-  "confirm with your scheme" type notes.
-- **Emergency banner:** red rail, alert-wash background, siren icon, the
-  static emergency copy. Appears at top of result when emergency is detected.
-- **Code chip:** mono font, teal-wash background, copy icon — for ICD-10 /
+- **Scenario card:** a numbered chip in a category-tinted rounded square, title
+  (Inter 600), one-line blurb (`--ink-soft`), and a CTA row. Whole card is
+  tappable with a clear focus ring (`--ring`). Category class (`cat-*`)
+  colour-codes the chip.
+- **Buttons:** primary = solid `--pine`, white text, hover `--pine-deep`.
+  Secondary = `--surface` with `--line` border. Emergency actions use `--coral`
+  (`.btn-alert`). Destructive styling is **not** used — nothing here deletes
+  user data.
+- **Inputs / choices:** large "chips" for guided questions; selected =
+  `--pine-tint` fill + `--pine` border. Free-text uses a calm bordered textarea.
+  "Skip" is always a quiet text link (FR3: users can skip).
+- **Caution callout:** gold-tint panel, gold rail, info icon — for "confirm
+  with your scheme" notes.
+- **Emergency banner:** coral, siren icon, the static emergency copy. Appears at
+  the top of the result when emergency is detected.
+- **Code chip:** mono font, pine-tint background, copy icon — for ICD-10 /
   authorisation numbers.
+- **Pine band (`.band-pine`):** one accent band per page to break long pale
+  runs. Structural, not decorative — at most one per page.
 - **Disclaimer footer:** small, `--ink-soft`, always visible — never hidden
   behind a toggle (FR13).
 
@@ -130,29 +145,39 @@ one memorable device; everything else stays quiet.
 
 ## 6. Motion
 
-Minimal and purposeful (respect `prefers-reduced-motion`).
+Calm and purposeful — trustworthy micro-motion, with **one signature moment**.
+All easing/duration comes from tokens (`--ease-out`, `--dur-micro`,
+`--dur-move`, `--dur-reveal`).
 
-- Card tap: 120ms ease scale to 0.99.
-- Result reveal: sections fade+rise 160ms, staggered 40ms — only on first
-  render, never on emergency content (emergency appears instantly).
-- No looping/ambient animation. This is a tool, not a showpiece.
+- **Micro-interactions:** card hover lift, chip select feedback, button press —
+  short (`--dur-micro`/`--dur-move`), soft ease-out, no bounce.
+- **Flow transitions:** calm crossfade + small vertical shift between the
+  question, generating, and result views; subtle slide/fade between question
+  steps.
+- **The signature moment:** on the result screen the **decision brief assembles
+  itself** — sections enter in a gentle stagger (`--dur-reveal`). This is the
+  one memorable flourish; everything else stays quiet.
+- **Emergency content appears instantly** — never staggered or delayed.
+- No looping / ambient animation. This is a tool, not a showpiece.
 
 ---
 
 ## 7. Accessibility floor (non-negotiable)
 
-- Visible keyboard focus on every interactive element.
-- Colour never the sole signal — icon + label always accompany status.
+- Visible keyboard focus on every interactive element (`--ring`).
+- Colour is never the sole signal — icon + label always accompany status.
 - Tap targets ≥ 44px; inputs have real `<label>`s.
-- `prefers-reduced-motion` disables all transitions.
-- Emergency content is reachable and readable with zero JS (server-rendered
-  fallback) — safety must not depend on a script loading.
+- `prefers-reduced-motion` disables decorative/large motion and JS-driven
+  animation (via `useReducedMotion`) while keeping essential state feedback and
+  content visible.
+- Emergency content is reachable and readable without relying on animation —
+  safety must not depend on motion.
 - Tested down to 320px width.
 
 ---
 
-## 8. Tone of copy (paired with section 25 of the spec)
+## 8. Tone of copy
 
-Calm, plain, active voice. Buttons say what happens ("Get my checklist", not
+Calm, plain, active voice. Buttons say what happens ("Generate checklist", not
 "Submit"). Empty/error states give direction, not apology. Never use guarantee
-language in UI copy either ("Ask your scheme whether…", not "This is covered").
+language in UI copy ("Ask your scheme whether…", not "This is covered").

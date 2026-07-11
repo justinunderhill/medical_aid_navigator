@@ -92,12 +92,14 @@ a { color: var(--pine-deep); }
   font-weight: 600;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+  transition: background var(--dur-micro) var(--ease-out),
+    border-color var(--dur-micro) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
   text-decoration: none;
 }
 .btn:active { transform: translateY(1px); }
 .btn-primary { background: var(--pine); color: #fff; }
-.btn-primary:hover { background: var(--pine-deep); }
+.btn-primary:hover { background: var(--pine-deep); box-shadow: var(--shadow-hover); }
 .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--line); }
 .btn-secondary:hover { border-color: var(--pine); }
 .btn-alert { background: var(--coral); color: #fff; }
@@ -130,6 +132,18 @@ a { color: var(--pine-deep); }
 }
 
 .panel-tight { padding: var(--sp-3); }
+
+/* ---- Pine band: one accent per page to break long pale runs ---- */
+.band-pine {
+  background: var(--pine);
+  color: #ddeae6;
+  border-radius: var(--radius);
+  padding: var(--sp-4) var(--sp-6);
+}
+.band-pine strong,
+.band-pine h2,
+.band-pine h3 { color: #fff; }
+.band-pine a { color: #fff; text-decoration: underline; }
 
 /* ---- Homepage ---- */
 .home {
@@ -179,10 +193,29 @@ a { color: var(--pine-deep); }
   padding: 0 var(--sp-3);
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 70%, var(--paper));
+  background: color-mix(in srgb, var(--surface) 70%, var(--bone));
   color: var(--ink-soft);
   font-size: var(--fs-small);
   font-weight: 600;
+}
+
+/* Hero entrance — a calm, staggered rise on first paint. Gated on
+   no-preference so reduced-motion users get the hero fully visible and static
+   (never hidden behind an animation, and no JS dependency). */
+@media (prefers-reduced-motion: no-preference) {
+  .home-hero > * {
+    animation: hero-rise var(--dur-reveal) var(--ease-out) both;
+  }
+  .home-hero > *:nth-child(1) { animation-delay: 40ms; }
+  .home-hero > *:nth-child(2) { animation-delay: 120ms; }
+  .home-hero > *:nth-child(3) { animation-delay: 200ms; }
+  .home-hero > *:nth-child(4) { animation-delay: 280ms; }
+  .home-hero > *:nth-child(5) { animation-delay: 360ms; }
+  .home-hero > *:nth-child(6) { animation-delay: 440ms; }
+}
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
 }
 
 .section-title { margin: var(--sp-12) 0 var(--sp-4); }
@@ -216,8 +249,8 @@ a { color: var(--pine-deep); }
   position: absolute;
   left: 4px; top: 0.4em;
   width: 9px; height: 5px;
-  border-left: 2px solid var(--teal);
-  border-bottom: 2px solid var(--teal);
+  border-left: 2px solid var(--pine);
+  border-bottom: 2px solid var(--pine);
   transform: rotate(-45deg);
 }
 .assure-list.dont li::before {
@@ -236,8 +269,8 @@ a { color: var(--pine-deep); }
   border-radius: var(--radius);
   box-shadow: none;
   padding: var(--sp-6);
-  border-left: 4px solid var(--amber);
-  background: color-mix(in srgb, var(--amber-wash) 62%, var(--surface));
+  border-left: 4px solid var(--gold);
+  background: color-mix(in srgb, var(--gold-tint) 62%, var(--surface));
 }
 
 .mvp-limits h2 {
@@ -318,7 +351,7 @@ a { color: var(--pine-deep); }
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--teal);
+  background: var(--pine);
 }
 
 @media (min-width: 680px) {
@@ -393,11 +426,11 @@ a { color: var(--pine-deep); }
   display: grid;
   gap: var(--sp-2);
   align-content: start;
-  border-top: 3px solid color-mix(in srgb, var(--teal) 30%, var(--line));
+  border-top: 3px solid color-mix(in srgb, var(--pine) 30%, var(--line));
 }
 
 .sources-card svg {
-  color: var(--teal-deep);
+  color: var(--pine-deep);
 }
 
 .sources-card h2,
@@ -449,7 +482,7 @@ a { color: var(--pine-deep); }
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--teal);
+  background: var(--pine);
 }
 
 @media (min-width: 720px) {
@@ -531,11 +564,11 @@ a { color: var(--pine-deep); }
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: none;
-  border-top: 3px solid color-mix(in srgb, var(--teal) 30%, var(--line));
+  border-top: 3px solid color-mix(in srgb, var(--pine) 30%, var(--line));
 }
 
 .principle-card svg {
-  color: var(--teal-deep);
+  color: var(--pine-deep);
 }
 
 .principle-card h2 {
@@ -615,7 +648,7 @@ a { color: var(--pine-deep); }
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--teal);
+  background: var(--pine);
 }
 
 @media (min-width: 720px) {
@@ -732,8 +765,8 @@ a { color: var(--pine-deep); }
 
 .topic-index a:hover,
 .topic-index a:focus-visible {
-  color: var(--teal-deep);
-  background: var(--teal-wash);
+  color: var(--pine-deep);
+  background: var(--pine-tint);
   outline: none;
 }
 
@@ -849,7 +882,7 @@ a { color: var(--pine-deep); }
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--teal);
+  background: var(--pine);
 }
 
 ol.explainer-list {
@@ -870,8 +903,8 @@ ol.explainer-list li::before {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--teal-wash);
-  color: var(--teal-deep);
+  background: var(--pine-tint);
+  color: var(--pine-deep);
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -925,7 +958,9 @@ ol.explainer-list li::before {
   overflow: hidden;
   color: inherit;
   text-decoration: none;
-  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  transition: transform var(--dur-move) var(--ease-out),
+    box-shadow var(--dur-move) var(--ease-out),
+    border-color var(--dur-move) var(--ease-out);
 }
 .scenario-card::before {
   content: "";
@@ -984,7 +1019,7 @@ ol.explainer-list li::before {
   font-size: 13px;
   font-weight: 600;
 }
-.scenario-cta .arr { transition: transform 120ms ease; }
+.scenario-cta .arr { transition: transform var(--dur-move) var(--ease-out); }
 .scenario-card:hover .scenario-cta .arr { transform: translateX(3px); }
 .scenario-card.cat-urgent::before { background: var(--coral); }
 .scenario-card.cat-urgent { background: linear-gradient(90deg, var(--coral-tint), var(--surface) 62%); }
@@ -1037,9 +1072,9 @@ ol.explainer-list li::before {
 
 /* ---- Emergency gate ---- */
 .emergency-gate {
-  border: 1px solid color-mix(in srgb, var(--alert) 30%, var(--line));
+  border: 1px solid color-mix(in srgb, var(--coral) 30%, var(--line));
   border-radius: var(--radius);
-  background: color-mix(in srgb, var(--alert-wash) 62%, var(--surface));
+  background: color-mix(in srgb, var(--coral-tint) 62%, var(--surface));
   box-shadow: none;
   padding: var(--sp-6);
 }
@@ -1052,7 +1087,7 @@ ol.explainer-list li::before {
   margin-bottom: var(--sp-3);
   border-radius: var(--radius-sm);
   background: var(--surface);
-  color: var(--alert);
+  color: var(--coral);
 }
 
 .emergency-gate h1 {
@@ -1180,7 +1215,7 @@ ol.explainer-list li::before {
 
 .step-fill {
   height: 100%;
-  background: var(--teal);
+  background: var(--pine);
 }
 
 .question-actions {
@@ -1237,9 +1272,12 @@ ol.explainer-list li::before {
   min-height: 44px;
   cursor: pointer;
   font: inherit;
-  transition: background 120ms ease, border-color 120ms ease;
+  transition: background var(--dur-micro) var(--ease-out),
+    border-color var(--dur-micro) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
 }
 .chip:hover { border-color: var(--pine); }
+.chip:active { transform: scale(0.97); }
 .chip[aria-pressed="true"] { background: var(--pine-tint); border-color: var(--pine); color: var(--pine-deep); font-weight: 500; }
 .chip:focus-visible { outline: none; box-shadow: var(--ring); }
 
@@ -1261,9 +1299,9 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
   max-width: 64ch;
   margin: 0 0 var(--sp-2);
   padding: var(--sp-3);
-  border: 1px solid color-mix(in srgb, var(--amber) 24%, var(--line));
+  border: 1px solid color-mix(in srgb, var(--gold) 24%, var(--line));
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--amber-wash) 55%, var(--surface));
+  background: color-mix(in srgb, var(--gold-tint) 55%, var(--surface));
   color: var(--ink);
   font-size: var(--fs-small);
 }
@@ -1336,7 +1374,7 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
 .site-footer-attribution a {
   font-style: normal;
   font-weight: 600;
-  color: var(--teal-deep);
+  color: var(--pine-deep);
 }
 
 .nav-links { display: flex; gap: var(--sp-4); font-size: var(--fs-small); margin-left: auto; }
@@ -1371,8 +1409,8 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
 
 .share-trigger:hover,
 .share-copy:hover {
-  border-color: var(--teal);
-  color: var(--teal-deep);
+  border-color: var(--pine);
+  color: var(--pine-deep);
 }
 
 .share-trigger:focus-visible,
@@ -1416,14 +1454,14 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
   justify-content: center;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  color: var(--teal-deep);
+  color: var(--pine-deep);
   text-decoration: none;
   font-size: var(--fs-small);
   font-weight: 600;
 }
 
 .share-links a:hover {
-  background: var(--teal-wash);
+  background: var(--pine-tint);
 }
 
 .share-copy {
@@ -1465,8 +1503,8 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
 /* ---- Spinner ---- */
 .spinner {
   width: 22px; height: 22px;
-  border: 2.5px solid var(--teal-wash);
-  border-top-color: var(--teal);
+  border: 2.5px solid var(--pine-tint);
+  border-top-color: var(--pine);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -1489,7 +1527,7 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
   font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
   color: var(--ink-soft);
-  background: var(--teal-wash);
+  background: var(--pine-tint);
   border-radius: var(--radius-sm);
   padding: 2px 8px;
 }
@@ -1517,23 +1555,42 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
 }
 .generating-steps li.is-active { color: var(--ink); font-weight: 600; }
 .generating-steps li.is-active .generating-dot {
-  border-color: var(--teal);
+  border-color: var(--pine);
   animation: pulse 1s ease-in-out infinite;
 }
 .generating-steps li.is-done { color: var(--ink); }
 .generating-steps li.is-done .generating-dot {
-  background: var(--teal);
-  border-color: var(--teal);
+  background: var(--pine);
+  border-color: var(--pine);
 }
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--teal) 40%, transparent); }
-  50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--teal) 0%, transparent); }
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--pine) 40%, transparent); }
+  50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--pine) 0%, transparent); }
 }
 
-/* ---- Reveal animation ---- */
-.reveal { animation: rise 160ms ease both; }
-@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+/* ---- Screen-reader-only utility ---- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 
+/* ---- Reduced motion ----
+   Fast-forward rather than a blanket kill: animations complete instantly (so
+   the loading spinner settles as a clean static ring, not a frozen quarter)
+   and focus/state feedback appears without movement. JS-driven motion is
+   handled separately via useReducedMotion(). */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
