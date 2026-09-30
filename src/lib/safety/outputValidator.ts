@@ -33,7 +33,26 @@ interface Rule {
   severity: 'hard' | 'soft';
   // replacement applied for hard rules (function for capture reuse)
   replacement?: (match: string) => string;
+  /**
+   * Receives the text before a match. Return true when the match sits in a
+   * negated or hedged clause, where it is the safe phrasing rather than a
+   * violation, so it is neither flagged nor rewritten.
+   */
+  exempt?: (before: string) => boolean;
   note: string;
+}
+
+/**
+ * True when the clause leading up to a match is negated or hedged, e.g.
+ * "the document does not state that any MRI [is covered]" or "ask whether
+ * this [is covered]". The clause is cut at punctuation and at and/but/so/then,
+ * so a later affirmative claim ("not a problem and it [is covered]") is not
+ * shielded by an earlier negation.
+ */
+function inNegatedClause(before: string): boolean {
+  const clause = before.split(/[.!?;,:\n]|\b(?:and|but|so|then)\b/i).pop() ?? '';
+  const nearby = clause.trim().split(/\s+/).slice(-8).join(' ');
+  return /\b(?:not|no|never|cannot|cant|unable|unclear|whether|if)\b|n['’]t\b/i.test(nearby);
 }
 
 const RULES: Rule[] = [
@@ -42,6 +61,7 @@ const RULES: Rule[] = [
     test: /\b(will|must|is|are|shall)\s+(definitely\s+)?(be\s+)?(covered|paid|reimbursed|approved)\b/gi,
     severity: 'hard',
     replacement: () => 'may be covered (confirm with your scheme)',
+    exempt: inNegatedClause,
     note: 'Claim-payment guarantee softened to conditional language.',
   },
   {
@@ -57,7 +77,10 @@ const RULES: Rule[] = [
     note: 'Self-declared PMB status softened (app must not declare PMB).',
   },
   {
-    test: /\bguarantee(d|s)?\b/gi,
+    // Affirmative uses only. A negated use ("cannot guarantee", "no guarantee",
+    // "not guaranteed", "unable to guarantee") is the safe phrasing we want, so
+    // rewriting it would only corrupt the sentence.
+    test: /(?<!\b(?:not|no|cannot|cant|can['’]t|never|without|unable to|\w+n['’]t)\s+(?:(?:be|been|able to|a|an|any|possible to)\s+)?)\bguarantee(d|s)?\b/gi,
     severity: 'hard',
     replacement: () => 'cannot be guaranteed; please confirm',
     note: 'Guarantee language removed.',
@@ -103,15 +126,20 @@ export function validateOutput(input: string): ValidationResult {
   const flags: ValidationFlag[] = [];
 
   for (const rule of RULES) {
-    const matches = text.match(rule.test);
-    if (matches && matches.length > 0) {
+    const isViolation = (offset: number) => !rule.exempt?.(text.slice(0, offset));
+    const violations = [...text.matchAll(rule.test)].filter((m) => isViolation(m.index ?? 0));
+    if (violations.length > 0) {
       flags.push({
         severity: rule.severity,
         pattern: rule.test.source,
         note: rule.note,
       });
       if (rule.severity === 'hard' && rule.replacement) {
-        text = text.replace(rule.test, (m) => rule.replacement!(m));
+        const current = text;
+        text = current.replace(rule.test, (m, ...args) => {
+          const offset = args.find((a) => typeof a === 'number') as number;
+          return rule.exempt?.(current.slice(0, offset)) ? m : rule.replacement!(m);
+        });
       }
     }
   }

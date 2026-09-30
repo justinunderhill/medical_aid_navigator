@@ -18,6 +18,31 @@ describe('validateOutput', () => {
     expect(r.text.toLowerCase()).toContain('confirm');
   });
 
+  it.each([
+    'The document does not state that any MRI is covered in full.',
+    'There is no guarantee that this will be paid.',
+    'Ask your scheme whether this is covered.',
+    "We can't confirm it is covered.",
+    "It isn't clear that this will be approved.",
+    'Your plan document is unclear on whether the scan is reimbursed.',
+  ])('leaves negated or hedged covered/paid language untouched: %s', (text) => {
+    const r = validateOutput(text);
+    expect(r.text).toBe(text);
+    expect(r.flags.filter((f) => f.severity === 'hard')).toHaveLength(0);
+  });
+
+  it.each([
+    'Your MRI will be covered.',
+    'Yes, it is covered.',
+    'Not sure, but it is definitely covered.',
+    'This is not a problem and it is paid.',
+    'Do not worry. The claim will be approved.',
+  ])('still softens affirmative covered/paid language: %s', (text) => {
+    const r = validateOutput(text);
+    expect(r.safe).toBe(false);
+    expect(r.text).toContain('may be covered (confirm with your scheme)');
+  });
+
   it('softens a self-declared PMB status', () => {
     const r = validateOutput('Good news: this is a PMB.');
     expect(r.safe).toBe(false);
@@ -28,6 +53,34 @@ describe('validateOutput', () => {
     const r = validateOutput('We guarantee this claim.');
     expect(r.safe).toBe(false);
     expect(r.text).not.toMatch(/\bguarantee\b/i);
+  });
+
+  it.each([
+    "I'm not able to guarantee any claim outcome.",
+    'We cannot guarantee payment.',
+    "We can't guarantee the outcome of this claim.",
+    'There is no guarantee of cover.',
+    'Cover is not guaranteed.',
+    'This cannot be guaranteed.',
+    "It isn't guaranteed.",
+    'I am unable to guarantee the result.',
+    'Payment is never guaranteed.',
+    'This is not a guarantee of cover.',
+  ])('leaves negated guarantee language untouched: %s', (text) => {
+    const r = validateOutput(text);
+    expect(r.text).toBe(text);
+    expect(r.flags).toHaveLength(0);
+  });
+
+  it.each([
+    'We guarantee this claim.',
+    'Your claim is guaranteed to be paid.',
+    'No, we guarantee it.',
+    'Not sure, but we guarantee this scan.',
+  ])('still softens affirmative guarantee language: %s', (text) => {
+    const r = validateOutput(text);
+    expect(r.safe).toBe(false);
+    expect(r.text).toContain('cannot be guaranteed; please confirm');
   });
 
   it('removes advice against seeking care', () => {
