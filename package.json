@@ -13,7 +13,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.32.1",
+    "@anthropic-ai/sdk": "^0.129.0",
     "framer-motion": "^12.42.2",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.451.0",

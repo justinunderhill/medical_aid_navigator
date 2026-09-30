@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BookOpen, ShieldCheck, Info } from 'lucide-react';
+import { Home, FileText, BookOpen, ShieldCheck, Info } from 'lucide-react';
 
 const TABS = [
   { href: '/', label: 'Home', icon: Home },
+  { href: '/cover', label: 'Your cover', icon: FileText },
   { href: '/explainers', label: 'Explainers', icon: BookOpen },
   { href: '/sources', label: 'Sources', icon: ShieldCheck },
   { href: '/about', label: 'About', icon: Info },

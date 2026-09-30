@@ -24,7 +24,7 @@ function sweepExpired(now: number): void {
   }
 }
 
-export function rateLimit(key: string): { allowed: boolean; retryAfter: number } {
+export function rateLimit(key: string, limit: number = LIMIT): { allowed: boolean; retryAfter: number } {
   const now = Date.now();
   sweepExpired(now);
   const entry = hits.get(key);
@@ -34,7 +34,7 @@ export function rateLimit(key: string): { allowed: boolean; retryAfter: number }
     return { allowed: true, retryAfter: 0 };
   }
 
-  if (entry.count >= LIMIT) {
+  if (entry.count >= limit) {
     return { allowed: false, retryAfter: Math.ceil((entry.resetAt - now) / 1000) };
   }
 

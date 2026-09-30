@@ -1772,3 +1772,88 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================
+   Your cover — plan document Q&A
+   The evidence "slip" is this page's one signature element: the plan's own
+   wording, tabbed with the page it came from.
+   ============================================================ */
+.cover { max-width: var(--reading-measure); margin: 0 auto; padding: var(--sp-8) 0 var(--sp-12); }
+.cover-head h1 { font-family: var(--font-display); font-size: var(--fs-display); line-height: 1.08; margin: var(--sp-2) 0 var(--sp-3); }
+.cover-lead { color: var(--ink-soft); max-width: 36rem; margin-bottom: var(--sp-6); }
+
+.cover-drop {
+  display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap;
+  padding: var(--sp-6); border: 1.5px dashed var(--line-strong); border-radius: var(--radius);
+  background: var(--surface); transition: border-color var(--dur-micro), background var(--dur-micro);
+}
+.cover-drop > div { flex: 1 1 14rem; display: grid; gap: 2px; }
+.cover-drop span { color: var(--ink-soft); font-size: var(--fs-small); }
+.cover-drop.is-over { border-color: var(--garnet); background: var(--garnet-tint); }
+.cover-drop svg { color: var(--garnet); }
+
+.cover-file {
+  display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-card);
+}
+.cover-file svg { color: var(--garnet); flex: none; }
+.cover-file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.cover-file-size { color: var(--ink-soft); font-size: var(--fs-small); }
+.cover-file-clear { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 0; background: transparent; cursor: pointer; color: var(--ink-soft); }
+.cover-file-clear:hover { background: var(--surface-2); color: var(--ink); }
+
+.cover-privacy { display: flex; gap: var(--sp-2); align-items: center; margin: var(--sp-3) 0 var(--sp-6); font-size: var(--fs-small); color: var(--ink-soft); }
+.cover-privacy svg { flex: none; color: var(--silver-deep); }
+
+.cover-ask { display: flex; gap: var(--sp-2); align-items: flex-end; }
+.cover-ask textarea {
+  flex: 1; resize: none; font: inherit; padding: var(--sp-3) var(--sp-4); border-radius: var(--radius);
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+}
+.cover-ask textarea:focus-visible { outline: none; box-shadow: var(--ring); }
+.cover-ask .btn { width: 48px; height: 48px; padding: 0; justify-content: center; border-radius: 50%; }
+
+.cover-suggest { list-style: none; padding: 0; margin: var(--sp-4) 0 0; display: grid; gap: var(--sp-2); }
+.cover-suggest button {
+  width: 100%; text-align: left; font: inherit; padding: var(--sp-3) var(--sp-4); cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--ink);
+  transition: border-color var(--dur-micro);
+}
+.cover-suggest button:hover { border-color: var(--garnet); }
+.cover-suggest button:focus-visible { outline: none; box-shadow: var(--ring); }
+
+.cover-status { display: flex; gap: var(--sp-2); align-items: center; margin-top: var(--sp-6); color: var(--ink-soft); }
+.cover-error { margin-top: var(--sp-3); color: var(--coral-deep); font-size: var(--fs-small); }
+.spin { animation: cover-spin 0.9s linear infinite; }
+@keyframes cover-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+
+.cover-answer { margin-top: var(--sp-8); }
+.cover-q { font-family: var(--font-display); font-size: var(--fs-h2); color: var(--steel-deep); margin-bottom: var(--sp-4); }
+.cover-body { line-height: 1.65; white-space: pre-line; }
+.cite-mark {
+  display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 3px; padding: 0 4px;
+  border-radius: 9px; background: var(--garnet); color: #fff; font-size: 0.68rem; font-weight: 700;
+  text-decoration: none; vertical-align: super; line-height: 1;
+}
+.cite-mark:focus-visible { outline: none; box-shadow: var(--ring); }
+
+.cover-evidence { margin-top: var(--sp-6); display: grid; gap: var(--sp-3); }
+.cover-evidence h2 { font-size: var(--fs-small); font-weight: 600; color: var(--ink-soft); }
+.slip {
+  position: relative; margin: 0; padding: var(--sp-4) var(--sp-4) var(--sp-4) calc(var(--sp-4) + 68px);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-card);
+  scroll-margin-top: var(--sp-8);
+}
+.slip:target { border-color: var(--garnet); }
+.slip-tab {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 68px; display: grid; place-items: center; text-align: center;
+  background: var(--garnet); color: #fff; font-size: var(--fs-small); font-weight: 700;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm); padding: 0 var(--sp-2);
+}
+.slip p { font-family: var(--font-display); font-style: italic; line-height: 1.55; color: var(--ink); }
+
+.cover-nocite { margin-top: var(--sp-4); padding: var(--sp-3) var(--sp-4); background: var(--gold-tint); border-radius: var(--radius-sm); font-size: var(--fs-small); }
+.cover-caveat { margin-top: var(--sp-6); font-size: var(--fs-small); color: var(--ink-soft); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.cover-scope { margin: 0 0 var(--sp-6); font-size: var(--fs-small); line-height: 1.55; }
