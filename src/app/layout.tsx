@@ -3,6 +3,9 @@ import { Fraunces, Inter, IBM_Plex_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
+import { MobileNav } from '@/components/MobileNav';
+import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
+import { InstallPrompt } from '@/components/InstallPrompt';
 
 /**
  * Fonts are loaded with next/font (self-optimised, no render-blocking @import,
@@ -34,12 +37,17 @@ export const metadata: Metadata = {
   description:
     'A free, educational tool that helps South African medical aid members understand what to ask, check, and document before, during, and after using their benefits. Not medical, broker, or claim advice.',
   robots: { index: true, follow: true },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Nav',
+  },
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#123a36',
+  themeColor: '#7a1425',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -52,6 +60,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         {children}
         <SiteFooter />
+        <MobileNav />
+        <InstallPrompt />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
