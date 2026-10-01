@@ -79,10 +79,20 @@ export function ManConcierge({ dedicated = false }: { dedicated?: boolean }) {
   const chat = useContext(ConversationContext);
   const upload = useRef<HTMLInputElement>(null);
   const transcript = useRef<HTMLDivElement>(null);
+  const latestAnswer = useRef<HTMLElement>(null);
   const count = chat?.turns.length ?? 0;
   useEffect(() => {
-    if (transcript.current) transcript.current.scrollTop = count || chat?.busy ? transcript.current.scrollHeight : 0;
-  }, [count, chat?.busy]);
+    const pane = transcript.current;
+    if (!pane) return;
+    if (chat?.busy || chat?.error) {
+      pane.scrollTop = pane.scrollHeight;
+    } else if (count && latestAnswer.current) {
+      // Move only the conversation pane, not the page or the pinned composer.
+      pane.scrollTop += latestAnswer.current.getBoundingClientRect().top - pane.getBoundingClientRect().top - 12;
+    } else {
+      pane.scrollTop = 0;
+    }
+  }, [count, chat?.busy, chat?.error]);
   if (!chat) return null;
   const { file, turns, busy, pending, draft, error } = chat;
   return (
@@ -102,7 +112,7 @@ export function ManConcierge({ dedicated = false }: { dedicated?: boolean }) {
         </div>}
         {turns.map((turn, i) => <div className="man-turn" key={i}>
           <div className="man-question"><span className="sr-only">You: </span>{turn.question}</div>
-          <article className={`man-answer${turn.reply.isEmergency ? ' man-emergency' : ''}`}>
+          <article ref={i === turns.length - 1 ? latestAnswer : undefined} className={`man-answer${turn.reply.isEmergency ? ' man-emergency' : ''}`}>
             <p className="man-speaker">{turn.reply.isEmergency ? 'Get urgent help first' : 'MAN'}</p>
             <div className="man-answer-text">{turn.reply.segments.map((segment, j) => <Fragment key={j}>
               <Text value={segment.text} />
