@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { ManConcierge } from '@/components/ManConcierge';
-import { Disclaimer } from '@/components/Disclaimer';
 
 export const metadata: Metadata = {
   title: 'Your cover',
@@ -9,10 +8,9 @@ export const metadata: Metadata = {
 
 export default function CoverPage() {
   return (
-    <main className="desk-shell cover-page">
+    <main className="man-page cover-page">
       <h1 className="sr-only">Your cover — ask MAN</h1>
       <ManConcierge dedicated />
-      <Disclaimer />
     </main>
   );
 }

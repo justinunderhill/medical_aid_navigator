@@ -7,6 +7,7 @@ import { MobileNav } from '@/components/MobileNav';
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { ManProvider } from '@/components/ManConcierge';
+import { AppShell } from '@/components/AppShell';
 
 /**
  * Fonts are loaded with next/font (self-optimised, no render-blocking @import,
@@ -49,6 +50,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
+  interactiveWidget: 'resizes-content',
   themeColor: '#7a1425',
 };
 
@@ -60,12 +62,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         <ManProvider>
+        <AppShell>
         <SiteHeader />
         <ServiceWorkerRegister />
         {children}
         <SiteFooter />
         <MobileNav />
         <InstallPrompt />
+        </AppShell>
         </ManProvider>
       </body>
     </html>

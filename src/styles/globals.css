@@ -1925,3 +1925,69 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
   .install-prompt { gap: 8px; }
   .install-prompt-copy { font-size: .75rem; }
 }
+
+/* MAN uses a conversation pane and a separate, always-visible composer. */
+.man { display: flex; flex-direction: column; min-width: 0; padding: 0; overflow: hidden; }
+.man-heading { padding: 16px 20px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.man-heading h2 { font-size: 1.25rem; }
+.man-heading h2 span { font-size: .75rem; }
+.man-avatar { width: 44px; height: 44px; border-radius: 14px; }
+.man-presence { margin: 4px 0 0; font-size: .72rem; color: var(--ink-soft); }
+.man-space-link { padding: 10px 20px; background: var(--garnet-tint); }
+.man-transcript { flex: 1; min-height: 0; max-height: none; overflow: auto; padding: 16px; background: var(--pearl); scrollbar-gutter: auto; }
+.man:not(.man-dedicated) .man-transcript { max-height: 420px; }
+.man-turn { margin: 0 0 20px; }
+.man-question { background: var(--garnet); color: white; margin-bottom: 14px; padding: 12px 16px; font-size: .95rem; }
+.man-answer { width: fit-content; max-width: 94%; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px 18px 18px; line-height: 1.6; overflow-wrap: anywhere; }
+.man-answer p:last-child { margin-bottom: 0; }
+.man-speaker { margin-bottom: 6px; }
+.man-starters { margin: 16px 0; gap: 8px; }
+.man-starters button { background: var(--surface); padding: 12px; min-height: 44px; font-size: .8rem; align-items: center; }
+.man-working { margin-top: 0; font-size: .8rem; gap: 12px; }
+.man-typing { display: inline-flex; gap: 4px; align-items: center; height: 20px; flex-shrink: 0; }
+.man-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--garnet); animation: man-dot 1.2s ease-in-out infinite; }
+.man-typing i:nth-child(2) { animation-delay: .16s; }
+.man-typing i:nth-child(3) { animation-delay: .32s; }
+@keyframes man-dot { 0%, 60%, 100% { transform: translateY(0); opacity: .4; } 30% { transform: translateY(-5px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .man-typing i { animation: none; opacity: 1; } }
+.man-info { color: var(--ink-soft); font-size: .72rem; margin-top: 16px; }
+.man-info summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; text-decoration: underline; }
+.man-file { margin: 0; border-radius: 0; padding: 8px 16px; flex-shrink: 0; }
+.man-file span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.man-file small { font-size: .7rem; margin: 0; }
+.man-composer { margin: 0; padding: 10px 16px; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: var(--surface); flex-shrink: 0; }
+.man-composer textarea { display: block; resize: none; height: 44px; min-height: 44px; max-height: 88px; padding: 10px 0; font-size: 16px; line-height: 24px; }
+.man-composer-actions { gap: 8px; }
+.man-composer-actions .btn { width: 44px; min-height: 44px; padding: 0; border-radius: 50%; flex-shrink: 0; }
+.man-emergency { background: var(--coral-tint); border-left: 4px solid var(--coral); }
+.app-shell-chat { height: var(--chat-height, 100dvh); display: flex; flex-direction: column; overflow: hidden; }
+.app-shell-chat > .site-header, .app-shell-chat > .update-prompt { flex-shrink: 0; }
+.app-shell-chat > .site-footer, .app-shell-chat > .install-prompt { display: none; }
+.app-shell-chat .man-page { flex: 1; min-height: 0; width: 100%; max-width: 880px; display: flex; padding: 12px 20px; }
+.app-shell-chat .man-dedicated { flex: 1; min-height: 0; margin: 0; }
+@media (max-width: 720px) {
+  body:has(.app-shell-chat) { padding-bottom: 0; }
+  .app-shell-chat { position: fixed; top: var(--chat-top, 0px); left: 0; right: 0; padding-top: env(safe-area-inset-top, 0px); }
+  .app-shell-chat > .site-header { padding: 8px 12px; width: 100%; margin: 0; }
+  .app-shell-chat .wordmark { min-width: 0; font-size: 1rem; }
+  .app-shell-chat .wordmark-sub { display: none; }
+  .app-shell-chat .man-page { padding: 0; max-width: none; }
+  .app-shell-chat .man-dedicated { border: 0; border-radius: 0; box-shadow: none; }
+  .app-shell-chat > .mobile-nav { position: static; flex-shrink: 0; }
+  .man-heading { padding: 10px 12px; gap: 10px; }
+  .man-transcript { padding: 12px; }
+  .man-starters { grid-template-columns: 1fr; }
+  .man-composer { padding: 8px 12px; }
+  .man-answer { max-width: 96%; }
+  .man-question { max-width: 90%; }
+  .home { padding-top: 16px; }
+  .app-shell-chat.is-compact > .site-header, .app-shell-chat.is-compact > .mobile-nav { display: none; }
+  .app-shell-chat.is-compact .man-heading { padding: 6px 12px; }
+  .app-shell-chat.is-compact .man-heading h2 span, .app-shell-chat.is-compact .man-presence { display: none; }
+  .app-shell-chat.is-compact .man-composer { padding-bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-height: 500px) and (max-width: 720px) {
+  .app-shell-chat > .site-header, .app-shell-chat > .mobile-nav { display: none; }
+  .app-shell-chat .man-heading { padding: 6px 12px; }
+  .app-shell-chat .man-heading h2 span, .app-shell-chat .man-presence { display: none; }
+}
