@@ -1,59 +1,13 @@
 import Link from 'next/link';
-import { ArrowRight, Check } from 'lucide-react';
+import { ManConcierge } from '@/components/ManConcierge';
 import { SCENARIOS } from '@/data/scenarios';
 import { Disclaimer } from '@/components/Disclaimer';
 
 export default function HomePage() {
   return (
     <main className="home">
-      <section className="home-hero">
-        <div className="hero-copy">
-          <p className="eyebrow">Medical aid navigation</p>
-          <h1 className="h-display">
-            Know what to ask <span className="hl">before</span> you use your
-            medical aid.
-          </h1>
-          <p className="home-value-line">
-            Before you go, pay, claim, or authorise, know what to ask.
-          </p>
-          <p className="lead muted">
-            Medical aid members are often not short of information. They are
-            short of clarity at the moment they need to make a decision. This
-            tool helps you slow the moment down and ask better questions before
-            a benefit becomes a bill.
-          </p>
-          <div className="hero-actions">
-            <a className="btn btn-primary" href="#pick-situation">
-              Start a benefit check <ArrowRight size={17} />
-            </a>
-            <Link className="btn btn-secondary" href="/explainers">
-              View explainers
-            </Link>
-          </div>
-          <ul className="trust-bar" aria-label="Trust boundaries">
-            <li><Check size={15} strokeWidth={2.75} aria-hidden /> No diagnosis</li>
-            <li><Check size={15} strokeWidth={2.75} aria-hidden /> No claim guarantees</li>
-            <li><Check size={15} strokeWidth={2.75} aria-hidden /> No live scheme connection</li>
-          </ul>
-        </div>
-
-        <div className="hero-preview" aria-hidden>
-          <div className="hero-preview-card">
-            <div className="hpc-head">
-              <span className="hpc-kicker">Decision brief</span>
-              <span className="hpc-tag">Going to casualty</span>
-            </div>
-            <div className="hpc-list">
-              <div className="hpc-row">Ask if the facility is in-network for your plan.</div>
-              <div className="hpc-row ask">Request the ICD-10 and procedure codes to keep.</div>
-              <div className="hpc-row warn">Check the emergency co-payment rules first.</div>
-            </div>
-            <div className="hpc-foot">
-              <span className="hpc-dot" /> Confirm with your scheme
-            </div>
-          </div>
-        </div>
-      </section>
+      <h1 className="sr-only">Medical Aid Navigator — ask MAN</h1>
+      <ManConcierge />
 
       <div className="callout callout-emergency" role="note">
         <strong>If this may be an emergency, get help first.</strong>{' '}

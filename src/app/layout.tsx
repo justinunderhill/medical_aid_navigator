@@ -6,6 +6,7 @@ import { SiteFooter } from '@/components/SiteFooter';
 import { MobileNav } from '@/components/MobileNav';
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
 import { InstallPrompt } from '@/components/InstallPrompt';
+import { ManProvider } from '@/components/ManConcierge';
 
 /**
  * Fonts are loaded with next/font (self-optimised, no render-blocking @import,
@@ -57,12 +58,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${inter.variable} ${fraunces.variable} ${plexMono.variable}`}
     >
       <body>
+        <ManProvider>
         <SiteHeader />
         {children}
         <SiteFooter />
         <MobileNav />
         <InstallPrompt />
         <ServiceWorkerRegister />
+        </ManProvider>
       </body>
     </html>
   );

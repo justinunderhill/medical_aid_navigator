@@ -40,6 +40,23 @@ available through the same provider interface by setting `AI_PROVIDER=openai`.
 
 ## Scripts
 
+### MAN concierge
+
+MAN is available on the home page, `/man`, and `/cover`. It answers from the
+app's concepts and scenarios, suggests allowlisted navigation links, and accepts
+benefits PDFs with page citations. Follow-ups include the last six exchanges.
+Chat and the selected document survive in-app navigation in React memory only;
+refreshing, clearing chat, or changing the document clears the conversation.
+The PDF is sent again for each question; this is document grounding, not model training
+or a persistent document index. Nothing is written to a database or browser storage.
+
+General chat uses `AI_PROVIDER`. PDF reading requires `ANTHROPIC_API_KEY`, including
+when general chat uses OpenAI. Files are limited to 4 MB; the PDF provider supports
+up to 100 pages. MAN has no connection to live scheme balances or claim status.
+The `/api/concierge` route validates bounded multipart requests, runs deterministic
+emergency detection before AI, and returns uncached responses. Provider errors do
+not expose or log chat or document content.
+
 | Command | What it does |
 |---|---|
 | `npm run dev` | Local dev server |
