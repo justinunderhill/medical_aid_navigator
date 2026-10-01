@@ -1981,6 +1981,9 @@ label { display: block; font-weight: 500; margin-bottom: var(--sp-2); }
   .man-answer { max-width: 96%; }
   .man-question { max-width: 90%; }
   .home { padding-top: 16px; }
+  .home > .man { height: max(360px, calc(100svh - 180px)); }
+  .home > .man .man-transcript { max-height: none; }
+  .app-shell:has(.home > .man) > .install-prompt { position: static; margin: 0 16px 16px; }
   .app-shell-chat.is-compact > .site-header, .app-shell-chat.is-compact > .mobile-nav { display: none; }
   .app-shell-chat.is-compact .man-heading { padding: 6px 12px; }
   .app-shell-chat.is-compact .man-heading h2 span, .app-shell-chat.is-compact .man-presence { display: none; }
