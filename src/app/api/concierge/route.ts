@@ -51,8 +51,9 @@ export async function POST(req: NextRequest) {
   try {
     const answer = await answerConcierge(question.trim(), history, pdf);
     return json(answer);
-  } catch {
+  } catch (error) {
     // Never log questions, documents, or provider error payloads.
+    console.error('[concierge] generation failure:', error instanceof SyntaxError ? 'invalid-json' : 'provider-or-output-error');
     return json({ error: pdf ? 'MAN could not read your plan right now. Try again, or use an unlocked PDF of the benefit pages (up to 100 pages).' : 'MAN is temporarily unavailable. Please try again, or use the guided tools below.' }, 503);
   }
 }

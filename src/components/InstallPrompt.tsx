@@ -19,6 +19,7 @@ const DISMISSED_KEY = 'man-install-dismissed';
 export function InstallPrompt() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [dismissed, setDismissed] = useState(true);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     try {
@@ -32,10 +33,18 @@ export function InstallPrompt() {
       setDeferred(e as BeforeInstallPromptEvent);
     };
     window.addEventListener('beforeinstallprompt', onPrompt);
-    return () => window.removeEventListener('beforeinstallprompt', onPrompt);
+    const onFocus = () => setEditing(document.activeElement?.matches('input, textarea, select, [contenteditable="true"]') ?? false);
+    document.addEventListener('focusin', onFocus);
+    document.addEventListener('focusout', onFocus);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onPrompt);
+      document.removeEventListener('focusin', onFocus);
+      document.removeEventListener('focusout', onFocus);
+    };
   }, []);
 
   const dismiss = () => {
+    setDismissed(true);
     setDeferred(null);
     try {
       sessionStorage.setItem(DISMISSED_KEY, '1');
@@ -46,12 +55,17 @@ export function InstallPrompt() {
 
   const install = async () => {
     if (!deferred) return;
-    await deferred.prompt();
-    await deferred.userChoice;
-    setDeferred(null);
+    try {
+      await deferred.prompt();
+      await deferred.userChoice;
+    } catch {
+      // Installation is optional; an unsupported/dismissed prompt must not break the app.
+    } finally {
+      setDeferred(null);
+    }
   };
 
-  if (!deferred || dismissed) return null;
+  if (!deferred || dismissed || editing) return null;
 
   return (
     <div className="install-prompt" role="dialog" aria-label="Add to home screen">

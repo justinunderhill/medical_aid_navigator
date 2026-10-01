@@ -37,6 +37,8 @@ export interface GenerateOptions {
   messages: ChatMessage[];
   /** Force JSON-only output */
   jsonMode?: boolean;
+  /** Constrain supported providers to this JSON response schema. */
+  jsonSchema?: Record<string, unknown>;
   maxTokens?: number;
   temperature?: number;
 }

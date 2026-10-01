@@ -13,7 +13,7 @@ export default function OfflinePage() {
         <p className="eyebrow">No connection</p>
         <h1 id="offline-title">You&rsquo;re offline</h1>
         <p>
-          Medical Aid Navigator needs a connection to build a checklist. If
+          Medical Aid Navigator needs a connection to chat with MAN, read a benefits PDF, or build a checklist. If
           this is a medical emergency, do not wait for signal — call 10177
           (ambulance) or 112 from a mobile, or go to the nearest appropriate
           emergency facility.

@@ -76,8 +76,21 @@ export async function answerConcierge(question: string, history: ChatMessage[], 
   }
   const raw = await getProvider().generate({
     systemPrompt: `${system}\nReturn JSON: {"answer":"your concise answer", "destinations":["relevant destination id"]}. Include at most 3 destinations, or none.`,
-    messages: [...history, { role: 'user', content: question }],
-    jsonMode: true, maxTokens: 900, temperature: 0,
+    // Match the requested response format in prior assistant turns as well.
+    // Plain-text assistant history otherwise encourages prose instead of JSON on follow-ups.
+    messages: [...history.map(message => message.role === 'assistant'
+      ? { ...message, content: JSON.stringify({ answer: message.content, destinations: [] }) }
+      : message), { role: 'user', content: question }],
+    jsonMode: true,
+    jsonSchema: {
+      type: 'object', additionalProperties: false,
+      properties: {
+        answer: { type: 'string' },
+        destinations: { type: 'array', items: { type: 'string', enum: DESTINATIONS.map(d => d.id) } },
+      },
+      required: ['answer', 'destinations'],
+    },
+    maxTokens: 1200, temperature: 0,
   });
   return parseGeneralReply(raw);
 }

@@ -27,6 +27,7 @@ export function createAnthropicProvider(): AIProvider {
         max_tokens: opts.maxTokens ?? 1500,
         temperature: opts.temperature ?? 0.3,
         system,
+        ...(opts.jsonSchema ? { output_config: { format: { type: 'json_schema' as const, schema: opts.jsonSchema } } } : {}),
         messages: opts.messages.map((m) => ({
           role: m.role,
           content: m.content,

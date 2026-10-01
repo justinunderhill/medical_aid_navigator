@@ -22,7 +22,7 @@ function useConversation() {
 
   async function ask(text: string) {
     const question = text.trim();
-    if (!question || busy) return;
+    if (!question || busy || active.current) return;
     const controller = new AbortController();
     active.current = controller;
     setBusy(true); setError(''); setDraft(question);
@@ -36,14 +36,14 @@ function useConversation() {
       ])));
       if (file) body.set('plan', file);
       const response = await fetch('/api/concierge', { method: 'POST', body, signal: controller.signal });
-      const data = await response.json();
+      const data = await response.json().catch(() => ({ error: 'MAN could not answer right now. Please try again.' }));
       if (!response.ok) throw new Error(data.error || 'MAN could not answer. Please try again.');
       if (!Array.isArray(data.segments) || !Array.isArray(data.links)) throw new Error('Unexpected response. Please try again.');
       if (active.current !== controller) return;
       setTurns(previous => [...previous, { question, reply: data }]);
       setDraft('');
     } catch (err) {
-      if (active.current === controller) setError(controller.signal.aborted ? 'That took too long. Please try again.' : err instanceof Error ? err.message : 'Check your connection and try again.');
+      if (active.current === controller) setError(controller.signal.aborted ? 'That took too long. Please try again.' : err instanceof TypeError ? 'Check your connection and try again.' : err instanceof Error ? err.message : 'Check your connection and try again.');
     } finally {
       clearTimeout(timeout);
       if (active.current === controller) { active.current = null; setBusy(false); }
@@ -114,14 +114,14 @@ export function ManConcierge({ dedicated = false }: { dedicated?: boolean }) {
         {busy && <p className="man-working" role="status"><Loader2 className="spin" size={17} />{file ? 'MAN is reading your plan and checking the answer…' : 'MAN is checking the app’s guidance…'}</p>}
       </div>
 
-      {!turns.length && <div className="man-starters" aria-label="Suggested questions">{(file ? planStarters : starters).map(text => <button key={text} disabled={busy} type="button" onClick={() => chat.ask(text)}>{text}<span aria-hidden>↗</span></button>)}</div>}
-      {error && <p className="cover-error" role="alert">{error}</p>}
+      {error && <div className="cover-error" role="alert"><p>{error}</p><p>If symptoms are severe, seek urgent care now. Call 112 from a mobile or 10177 for an ambulance.</p><Link href="/#pick-situation">Use the guided tools →</Link></div>}
       <form className="man-composer" onSubmit={event => { event.preventDefault(); void chat.ask(draft); }}>
         <label className="sr-only" htmlFor="man-question">Ask MAN</label>
         <textarea id="man-question" rows={2} maxLength={1500} disabled={busy} value={draft} onChange={event => chat.setDraft(event.target.value)} placeholder={file ? 'Ask about your plan, or ask a follow-up…' : 'What would you like help with?'} onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void chat.ask(draft); } }} />
         <div className="man-composer-actions"><button type="button" className="man-attach" disabled={busy} onClick={() => upload.current?.click()}><Paperclip size={17} />{file ? 'Replace plan' : 'Attach benefits PDF'}</button><button className="btn btn-primary" disabled={busy || !draft.trim()} aria-label="Send message to MAN"><ArrowUp size={20} /></button></div>
         <input ref={upload} type="file" accept="application/pdf,.pdf" hidden onChange={event => { const next = event.target.files?.[0]; if (next) chat.attach(next); event.target.value = ''; }} />
       </form>
+      {!turns.length && <div className="man-starters" aria-label="Suggested questions">{(file ? planStarters : starters).map(text => <button key={text} disabled={busy} type="button" onClick={() => chat.ask(text)}>{text}<span aria-hidden>↗</span></button>)}</div>}
       <p className="man-privacy">PDF up to 4 MB / 100 pages. Attaching or removing a plan starts a new chat. Your chat and PDF stay in this tab’s memory until cleared or refreshed; relevant messages and the PDF are sent to our AI provider to answer each question. They are not saved by this app.</p>
       <p className="man-disclaimer">Educational guidance, not medical or financial advice. MAN can make mistakes; check the cited text and confirm cover with your scheme. No live balances or claim status. <Link href="/about">Privacy</Link></p>
     </section>

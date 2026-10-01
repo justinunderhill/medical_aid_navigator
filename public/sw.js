@@ -2,7 +2,7 @@
 // Goal: installable PWA with a real offline fallback, not full offline
 // functionality (the checklist API always needs a network round-trip).
 
-const CACHE = 'man-shell-v1';
+const CACHE = 'man-shell-v2';
 const APP_SHELL = ['/', '/offline'];
 
 self.addEventListener('install', (event) => {
