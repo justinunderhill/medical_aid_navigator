@@ -28,7 +28,14 @@ await check('/does-not-exist', {}, 404);
 const manifest = await (await check('/manifest.webmanifest')).json();
 assert.equal(manifest.display, 'standalone');
 for (const icon of manifest.icons) assert((await check(icon.src)).headers.get('content-type')?.includes('image'));
-await check('/sw.js');
+const versionResponse = await check('/api/version');
+assert(versionResponse.headers.get('cache-control')?.includes('no-store'));
+const { version } = await versionResponse.json();
+assert(typeof version === 'string' && version.length > 0);
+const workerResponse = await check('/sw.js');
+assert(workerResponse.headers.get('content-type')?.includes('javascript'));
+assert(workerResponse.headers.get('cache-control')?.includes('no-store'));
+assert((await workerResponse.text()).includes(`man-shell-${version}`));
 assert.equal((await (await check('/api/health')).json()).status, 'ok');
 console.log('PASS: 404, health, install manifest, icons, service worker');
 

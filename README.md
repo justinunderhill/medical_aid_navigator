@@ -40,6 +40,21 @@ available through the same provider interface by setting `AI_PROVIDER=openai`.
 
 ## Scripts
 
+### PWA updates
+
+Every deployment gets a build version shared by the browser, `/api/version`, and
+the generated `/sw.js`. Active sessions check for updates every five minutes,
+when returning to the foreground, and when reconnecting. Both endpoints bypass
+HTTP caching. A new service worker waits until the user chooses **Refresh now**;
+**Later** hides the prompt for fifteen minutes. Another tab accepting an update
+does not force the current tab to reload. Refreshing clears the in-memory chat,
+selected plan, and unfinished guided checks, as explained in the prompt.
+
+Vercel provides the deployment or commit identifier automatically. Local builds
+use a generated UUID written once by the prebuild hook and reused on server restart.
+No manual service-worker cache version bump is needed. Existing open sessions from
+before this feature need one normal refresh to load the update controls.
+
 ### MAN concierge
 
 MAN is available on the home page, `/man`, and `/cover`. It answers from the

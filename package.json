@@ -4,6 +4,7 @@
   "private": true,
   "description": "AI-assisted medical aid benefit navigation MVP for South African members. Educational only — not medical, broker, or claim advice.",
   "scripts": {
+    "prebuild": "node scripts/write-build-version.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

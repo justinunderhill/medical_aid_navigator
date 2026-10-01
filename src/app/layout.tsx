@@ -61,11 +61,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ManProvider>
         <SiteHeader />
+        <ServiceWorkerRegister />
         {children}
         <SiteFooter />
         <MobileNav />
         <InstallPrompt />
-        <ServiceWorkerRegister />
         </ManProvider>
       </body>
     </html>
